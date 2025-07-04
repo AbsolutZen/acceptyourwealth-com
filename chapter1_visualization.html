@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 1: The Wake-Up Moment</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 900px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3);
+        }
+        
+        .title {
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            text-align: center;
+            font-size: 16px;
+            color: #7f8c8d;
+            margin-bottom: 40px;
+            font-style: italic;
+        }
+        
+        .spectrum-container {
+            position: relative;
+            margin: 40px 0;
+        }
+        
+        .spectrum-line {
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(90deg, #e74c3c 0%, #f39c12 50%, #27ae60 100%);
+            border-radius: 3px;
+            position: relative;
+        }
+        
+        .wake-up-point {
+            position: absolute;
+            top: -15px;
+            left: 75%;
+            width: 6px;
+            height: 36px;
+            background: #2c3e50;
+            border-radius: 3px;
+            animation: pulse 2s infinite;
+        }
+        
+        .wake-up-point::after {
+            content: 'WAKE-UP MOMENT';
+            position: absolute;
+            top: -30px;
+            left: -60px;
+            font-size: 12px;
+            font-weight: bold;
+            color: #2c3e50;
+            white-space: nowrap;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scaleY(1); }
+            50% { transform: scaleY(1.2); }
+        }
+        
+        .spectrum-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        
+        .label {
+            text-align: center;
+            flex: 1;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .performance-side {
+            color: #e74c3c;
+        }
+        
+        .presence-side {
+            color: #27ae60;
+        }
+        
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .side {
+            padding: 25px;
+            border-radius: 15px;
+            position: relative;
+        }
+        
+        .performance {
+            background: linear-gradient(135deg, #ffcccc, #ffe5e5);
+            border-left: 5px solid #e74c3c;
+        }
+        
+        .presence {
+            background: linear-gradient(135deg, #ccffcc, #e5ffe5);
+            border-left: 5px solid #27ae60;
+        }
+        
+        .side-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .side-subtitle {
+            font-size: 14px;
+            font-style: italic;
+            text-align: center;
+            margin-bottom: 20px;
+            opacity: 0.8;
+        }
+        
+        .characteristics {
+            list-style: none;
+        }
+        
+        .characteristics li {
+            margin: 12px 0;
+            padding: 8px 12px;
+            background: rgba(255,255,255,0.7);
+            border-radius: 8px;
+            font-size: 14px;
+            line-height: 1.4;
+            transition: transform 0.2s ease;
+        }
+        
+        .characteristics li:hover {
+            transform: translateX(5px);
+        }
+        
+        .performance .characteristics li {
+            border-left: 3px solid #e74c3c;
+        }
+        
+        .presence .characteristics li {
+            border-left: 3px solid #27ae60;
+        }
+        
+        .bali-quote {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 30px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .bali-quote::before {
+            content: '"';
+            font-size: 60px;
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            opacity: 0.3;
+        }
+        
+        .quote-text {
+            font-size: 18px;
+            font-style: italic;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .quote-author {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .insight-box {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 30px;
+            border: 2px dashed #6c757d;
+        }
+        
+        .insight-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #495057;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .insight-text {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #6c757d;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">Chapter 1: The Wake-Up Moment</h1>
+        <p class="subtitle">From Performing Wealth to Embodying Presence</p>
+        
+        <div class="spectrum-container">
+            <div class="spectrum-line">
+                <div class="wake-up-point"></div>
+            </div>
+            <div class="spectrum-labels">
+                <div class="label performance-side">PERFORMING</div>
+                <div class="label presence-side">EMBODYING</div>
+            </div>
+        </div>
+        
+        <div class="comparison-grid">
+            <div class="side performance">
+                <h3 class="side-title performance-side">Performing Wealth</h3>
+                <p class="side-subtitle">Optimizing everything except presence</p>
+                <ul class="characteristics">
+                    <li>🎭 Achieving to prove worth</li>
+                    <li>📊 Measuring success externally</li>
+                    <li>⚡ Constant hustle and optimization</li>
+                    <li>🎯 Moving goalposts ("more" addiction)</li>
+                    <li>🤖 Automated success, absent experience</li>
+                    <li>📱 Life as content and metrics</li>
+                    <li>😴 Emotionally numb despite achievements</li>
+                    <li>🏃‍♂️ Running toward future fulfillment</li>
+                </ul>
+            </div>
+            
+            <div class="side presence">
+                <h3 class="side-title presence-side">Embodying Presence</h3>
+                <p class="side-subtitle">Accepting wealth that already flows</p>
+                <ul class="characteristics">
+                    <li>🧘‍♂️ Being present to current abundance</li>
+                    <li>❤️ Measuring fulfillment internally</li>
+                    <li>🌊 Aligned action from flow state</li>
+                    <li>🙏 Gratitude for what already exists</li>
+                    <li>👁️ Conscious experience of success</li>
+                    <li>🌅 Life as sacred moments</li>
+                    <li>💖 Emotionally alive and connected</li>
+                    <li>🌱 Receiving abundance in the now</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="bali-quote">
+            <div class="quote-text">
+                You built this whole life so you wouldn't have to feel.
+            </div>
+            <div class="quote-author">— The Voice on the Bali Beach</div>
+        </div>
+        
+        <div class="insight-box">
+            <h3 class="insight-title">💡 Chapter 1 Core Insight</h3>
+            <p class="insight-text">
+                The emptiness isn't because you lack anything external—it's because you've abandoned the only place where fulfillment can actually be experienced: <strong>the present moment</strong>.
+            </p>
+        </div>
+    </div>
+</body>
+</html>

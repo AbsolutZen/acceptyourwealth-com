@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 5: Energy Flow Particles</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 1200px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3);
+        }
+        
+        .title {
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            text-align: center;
+            font-size: 16px;
+            color: #7f8c8d;
+            margin-bottom: 40px;
+            font-style: italic;
+        }
+        
+        .energy-canvas-container {
+            position: relative;
+            background: radial-gradient(circle at center, #0f0f23, #1a1a2e, #16213e);
+            border-radius: 20px;
+            height: 600px;
+            margin: 30px 0;
+            overflow: hidden;
+            border: 3px solid #2c3e50;
+        }
+        
+        .energy-canvas {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        
+        .consciousness-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle, 
+                rgba(255, 215, 0, 1) 0%,
+                rgba(255, 165, 0, 0.8) 30%,
+                rgba(138, 43, 226, 0.6) 70%,
+                transparent 100%);
+            border-radius: 50%;
+            animation: consciousnessFlowing 4s ease-in-out infinite;
+            z-index: 10;
+        }
+        
+        .consciousness-center::before {
+            content: '🧠';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+            z-index: 11;
+        }
+        
+        @keyframes consciousnessFlowing {
+            0%, 100% { 
+                transform: translate(-50%, -50%) scale(1);
+                box-shadow: 0 0 30px rgba(255, 215, 0, 0.6);
+            }
+            50% { 
+                transform: translate(-50%, -50%) scale(1.1);
+                box-shadow: 0 0 50px rgba(255, 215, 0, 0.9);
+            }
+        }
+        
+        .energy-source {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 3px solid;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .energy-source:hover {
+            transform: scale(1.1);
+        }
+        
+        .source-income {
+            top: 20px;
+            left: 50px;
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            border-color: #1e8449;
+            color: white;
+        }
+        
+        .source-business {
+            top: 100px;
+            left: 20px;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            border-color: #21618c;
+            color: white;
+        }
+        
+        .source-investment {
+            bottom: 100px;
+            left: 30px;
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+            border-color: #6c3483;
+            color: white;
+        }
+        
+        .source-gifts {
+            bottom: 20px;
+            left: 80px;
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            border-color: #d68910;
+            color: white;
+        }
+        
+        .energy-block {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            border: 3px solid;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: blockPulse 2s ease-in-out infinite;
+        }
+        
+        .energy-block:hover {
+            transform: scale(1.1);
+        }
+        
+        .block-guilt {
+            top: 150px;
+            right: 100px;
+            background: rgba(231, 76, 60, 0.8);
+            border-color: #c0392b;
+            color: white;
+        }
+        
+        .block-resentment {
+            top: 300px;
+            right: 50px;
+            background: rgba(142, 68, 173, 0.8);
+            border-color: #6c3483;
+            color: white;
+        }
+        
+        .block-sabotage {
+            bottom: 150px;
+            right: 120px;
+            background: rgba(230, 126, 34, 0.8);
+            border-color: #d35400;
+            color: white;
+        }
+        
+        @keyframes blockPulse {
+            0%, 100% { 
+                opacity: 0.8;
+                box-shadow: 0 0 15px rgba(0,0,0,0.3);
+            }
+            50% { 
+                opacity: 1;
+                box-shadow: 0 0 25px rgba(0,0,0,0.5);
+            }
+        }
+        
+        .sacred-geometry {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 200px;
+            opacity: 0.2;
+            animation: geometryRotate 20s linear infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes geometryRotate {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        
+        .particle-golden {
+            background: radial-gradient(circle, #ffd700, #ffb347);
+            box-shadow: 0 0 8px rgba(255, 215, 0, 0.8);
+        }
+        
+        .particle-blocked {
+            background: radial-gradient(circle, #2c3e50, #34495e);
+            box-shadow: 0 0 8px rgba(44, 62, 80, 0.8);
+        }
+        
+        .controls-panel {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            border: 2px solid #dee2e6;
+        }
+        
+        .controls-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #495057;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .control-sections {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .control-section {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid;
+        }
+        
+        .control-section.sources { border-left-color: #27ae60; }
+        .control-section.blocks { border-left-color: #e74c3c; }
+        .control-section.flow { border-left-color: #3498db; }
+        
+        .control-label {
+            font-size: 14px;
+            font-weight: bold;
+            color: #495057;
+            margin-bottom: 10px;
+        }
+        
+        .control-button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            margin: 3px;
+            border-radius: 5px;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        
+        .control-button:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+        
+        .control-button.active {
+            background: #27ae60;
+            box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
+        }
+        
+        .control-button.blocked {
+            background: #e74c3c;
+        }
+        
+        .energy-state-display {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 3px solid;
+            text-align: center;
+        }
+        
+        .state-thriving {
+            border-color: #27ae60;
+            color: #27ae60;
+        }
+        
+        .state-blocked {
+            border-color: #e74c3c;
+            color: #e74c3c;
+        }
+        
+        .state-moderate {
+            border-color: #f39c12;
+            color: #f39c12;
+        }
+        
+        .state-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .state-description {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+        
+        .flow-metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .metric {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .metric-value {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .metric-label {
+            font-size: 12px;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+        
+        .legend-section {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            border: 2px solid #e9ecef;
+        }
+        
+        .legend-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .legend-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 8px 0;
+            font-size: 14px;
+            color: #495057;
+        }
+        
+        .legend-symbol {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 10px;
+            border: 2px solid;
+        }
+        
+        .symbol-golden {
+            background: linear-gradient(135deg, #ffd700, #ffb347);
+            border-color: #e6c200;
+        }
+        
+        .symbol-blocked {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            border-color: #1b2631;
+        }
+        
+        .symbol-source {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            border-color: #1e8449;
+        }
+        
+        .symbol-block {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            border-color: #a93226;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">Chapter 5: Wealth as Energy</h1>
+        <p class="subtitle">Particle Flow System - Visualizing the energy of abundance</p>
+        
+        <div class="energy-canvas-container">
+            <canvas class="energy-canvas" id="energyCanvas" width="1100" height="600"></canvas>
+            
+            <!-- Central Consciousness -->
+            <div class="consciousness-center" id="consciousnessCenter"></div>
+            
+            <!-- Sacred Geometry -->
+            <div class="sacred-geometry">
+                <svg width="200" height="200" viewBox="0 0 200 200">
+                    <polygon points="100,20 180,180 20,180" fill="none" stroke="rgba(255,215,0,0.3)" stroke-width="2"/>
+                    <circle cx="100" cy="100" r="80" fill="none" stroke="rgba(255,215,0,0.3)" stroke-width="2"/>
+                    <polygon points="100,50 150,100 100,150 50,100" fill="none" stroke="rgba(255,215,0,0.3)" stroke-width="2"/>
+                </svg>
+            </div>
+            
+            <!-- Energy Sources -->
+            <div class="energy-source source-income" data-source="income" title="Salary Income">💰</div>
+            <div class="energy-source source-business" data-source="business" title="Business Revenue">🏢</div>
+            <div class="energy-source source-investment" data-source="investment" title="Investment Returns">📈</div>
+            <div class="energy-source source-gifts" data-source="gifts" title="Gifts & Windfalls">🎁</div>
+            
+            <!-- Energy Blocks -->
+            <div class="energy-block block-guilt" data-block="guilt" title="Guilt Block">😔</div>
+            <div class="energy-block block-resentment" data-block="resentment" title="Resentment Block">😠</div>
+            <div class="energy-block block-sabotage" data-block="sabotage" title="Self-Sabotage Block">😵</div>
+        </div>
+        
+        <div class="energy-state-display state-blocked" id="energyState">
+            <div class="state-title" id="stateTitle">Energy State: BLOCKED</div>
+            <div class="state-description" id="stateDescription">Multiple energy blocks are disrupting your wealth flow</div>
+            
+            <div class="flow-metrics">
+                <div class="metric">
+                    <div class="metric-value" id="flowRate">35%</div>
+                    <div class="metric-label">Flow Rate</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value" id="particleCount">45</div>
+                    <div class="metric-label">Active Particles</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value" id="blockCount">3</div>
+                    <div class="metric-label">Energy Blocks</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value" id="resonance">Low</div>
+                    <div class="metric-label">Resonance</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="controls-panel">
+            <h3 class="controls-title">⚡ Energy Flow Controls</h3>
+            
+            <div class="control-sections">
+                <div class="control-section sources">
+                    <div class="control-label">💫 Activate Energy Sources</div>
+                    <button class="control-button active" onclick="toggleSource('income')">Salary Stream</button>
+                    <button class="control-button active" onclick="toggleSource('business')">Business Flow</button>
+                    <button class="control-button active" onclick="toggleSource('investment')">Investment Energy</button>
+                    <button class="control-button" onclick="toggleSource('gifts')">Gift Frequency</button>
+                </div>
+                
+                <div class="control-section blocks">
+                    <div class="control-label">🔓 Clear Energy Blocks</div>
+                    <button class="control-button blocked" onclick="clearBlock('guilt')">Clear Guilt Block</button>
+                    <button class="control-button blocked" onclick="clearBlock('resentment')">Clear Resentment</button>
+                    <button class="control-button blocked" onclick="clearBlock('sabotage')">Clear Self-Sabotage</button>
+                    <button class="control-button" onclick="clearAllBlocks()">Clear All Blocks</button>
+                </div>
+                
+                <div class="control-section flow">
+                    <div class="control-label">🌊 Flow Optimization</div>
+                    <button class="control-button" onclick="increaseFlowRate()">Increase Flow Rate</button>
+                    <button class="control-button" onclick="activateGeometry()">Sacred Geometry</button>
+                    <button class="control-button" onclick="optimizeSystem()">Optimize All</button>
+                    <button class="control-button" onclick="resetSystem()">Reset System</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="legend-section">
+            <h3 class="legend-title">🗝️ Energy Particle Legend</h3>
+            <div class="legend-grid">
+                <div>
+                    <div class="legend-item">
+                        <div class="legend-symbol symbol-golden"></div>
+                        <span><strong>Golden Particles:</strong> Free-flowing abundance energy</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-symbol symbol-blocked"></div>
+                        <span><strong>Dark Particles:</strong> Blocked or stagnant energy</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-symbol symbol-source"></div>
+                        <span><strong>Energy Sources:</strong> Income streams generating particles</span>
+                    </div>
+                </div>
+                <div>
+                    <div class="legend-item">
+                        <div class="legend-symbol symbol-block"></div>
+                        <span><strong>Energy Blocks:</strong> Emotional barriers disrupting flow</span>
+                    </div>
+                    <div class="legend-item">
+                        <span style="margin-left: 30px;">🧠 <strong>Consciousness Center:</strong> Your awareness & decision-making</span>
+                    </div>
+                    <div class="legend-item">
+                        <span style="margin-left: 30px;">📐 <strong>Sacred Geometry:</strong> Optimal flow patterns</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('energyCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        let particles = [];
+        let sources = {
+            income: true,
+            business: true,
+            investment: true,
+            gifts: false
+        };
+        let blocks = {
+            guilt: true,
+            resentment: true,
+            sabotage: true
+        };
+        let flowRate = 0.35;
+        let geometryActive = false;
+        
+        class Particle {
+            constructor(x, y, vx, vy, type) {
+                this.x = x;
+                this.y = y;
+                this.vx = vx;
+                this.vy = vy;
+                this.type = type; // 'golden' or 'blocked'
+                this.size = Math.random() * 4 + 2;
+                this.life = 1.0;
+                this.decay = Math.random() * 0.005 + 0.001;
+                this.brightness = type === 'golden' ? Math.random() * 0.5 + 0.5 : Math.random() * 0.3 + 0.2;
+            }
+            
+            update() {
+                // Move towards consciousness center with some randomness
+                const centerX = canvas.width / 2;
+                const centerY = canvas.height / 2;
+                const dx = centerX - this.x;
+                const dy = centerY - this.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                if (distance > 50) {
+                    // Attraction to center
+                    const force = 0.0002;
+                    this.vx += (dx / distance) * force;
+                    this.vy += (dy / distance) * force;
+                } else {
+                    // Orbit around center
+                    this.vx += -dy * 0.001;
+                    this.vy += dx * 0.001;
+                }
+                
+                // Add some randomness
+                this.vx += (Math.random() - 0.5) * 0.001;
+                this.vy += (Math.random() - 0.5) * 0.001;
+                
+                // Apply velocity damping
+                this.vx *= 0.99;
+                this.vy *= 0.99;
+                
+                // Update position
+                this.x += this.vx;
+                this.y += this.vy;
+                
+                // Decrease life
+                this.life -= this.decay;
+                
+                // Bounce off walls
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -0.8;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -0.8;
+                
+                this.x = Math.max(0, Math.min(canvas.width, this.x));
+                this.y = Math.max(0, Math.min(canvas.height, this.y));
+            }
+            
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.life * this.brightness;
+                
+                if (this.type === 'golden') {
+                    const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size);
+                    gradient.addColorStop(0, 'rgba(255, 215, 0, 1)');
+                    gradient.addColorStop(0.5, 'rgba(255, 179, 71, 0.8)');
+                    gradient.addColorStop(1, 'rgba(255, 215, 0, 0)');
+                    ctx.fillStyle = gradient;
+                } else {
+                    const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size);
+                    gradient.addColorStop(0, 'rgba(44, 62, 80, 1)');
+                    gradient.addColorStop(0.5, 'rgba(52, 73, 94, 0.8)');
+                    gradient.addColorStop(1, 'rgba(44, 62, 80, 0)');
+                    ctx.fillStyle = gradient;
+                }
+                
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Add glow effect for golden particles
+                if (this.type === 'golden') {
+                    ctx.shadowBlur = 10;
+                    ctx.shadowColor = 'rgba(255, 215, 0, 0.8)';
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size * 0.5, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                
+                ctx.restore();
+            }
+        }
+        
+        function createParticle(sourceType) {
+            let x, y;
+            
+            switch(sourceType) {
+                case 'income':
+                    x = 70; y = 40;
+                    break;
+                case 'business':
+                    x = 40; y = 120;
+                    break;
+                case 'investment':
+                    x = 50; y = canvas.height - 120;
+                    break;
+                case 'gifts':
+                    x = 100; y = canvas.height - 40;
+                    break;
+                default:
+                    x = Math.random() * 100;
+                    y = Math.random() * canvas.height;
+            }
+            
+            const vx = (Math.random() - 0.5) * 0.5;
+            const vy = (Math.random() - 0.5) * 0.5;
+            
+            // Determine particle type based on blocks
+            const activeBlocks = Object.values(blocks).filter(b => b).length;
+            const isBlocked = Math.random() < (activeBlocks / 5); // More blocks = more dark particles
+            const type = isBlocked ? 'blocked' : 'golden';
+            
+            particles.push(new Particle(x, y, vx, vy, type));
+        }
+        
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Update and draw particles
+            particles = particles.filter(particle => {
+                particle.update();
+                particle.draw();
+                return particle.life > 0;
+            });
+            
+            // Create new particles based on active sources
+            Object.entries(sources).forEach(([source, active]) => {
+                if (active && Math.random() < flowRate) {
+                    createParticle(source);
+                }
+            });
+            
+            // Draw connection lines between particles near center
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            
+            particles.forEach(particle => {
+                const distance = Math.sqrt((particle.x - centerX) ** 2 + (particle.y - centerY) ** 2);
+                if (distance < 100 && particle.type === 'golden') {
+                    ctx.save();
+                    ctx.globalAlpha = 0.1;
+                    ctx.strokeStyle = 'rgba(255, 215, 0, 0.5)';
+                    ctx.lineWidth = 1;
+                    ctx.beginPath();
+                    ctx.moveTo(particle.x, particle.y);
+                    ctx.lineTo(centerX, centerY);
+                    ctx.stroke();
+                    ctx.restore();
+                }
+            });
+            
+            requestAnimationFrame(animate);
+        }
+        
+        function updateSystemState() {
+            const activeBlocks = Object.values(blocks).filter(b => b).length;
+            const activeSources = Object.values(sources).filter(s => s).length;
+            const stateElement = document.getElementById('energyState');
+            const titleElement = document.getElementById('stateTitle');
+            const descElement = document.getElementById('stateDescription');
+            
+            // Update flow rate based on blocks and sources
+            flowRate = (activeSources * 0.1) - (activeBlocks * 0.05);
+            flowRate = Math.max(0.1, Math.min(1.0, flowRate));
+            
+            let state, description, className;
+            
+            if (activeBlocks === 0 && activeSources >= 3) {
+                state = 'Energy State: THRIVING';
+                description = 'Optimal energy flow with no blocks detected';
+                className = 'state-thriving';
+            } else if (activeBlocks <= 1 && activeSources >= 2) {
+                state = 'Energy State: FLOWING';
+                description = 'Good energy flow with minimal resistance';
+                className = 'state-moderate';
+            } else {
+                state = 'Energy State: BLOCKED';
+                description = 'Multiple energy blocks are disrupting your wealth flow';
+                className = 'state-blocked';
+            }
+            
+            titleElement.textContent = state;
+            descElement.textContent = description;
+            stateElement.className = 'energy-state-display ' + className;
+            
+            // Update metrics
+            document.getElementById('flowRate').textContent = Math.round(flowRate * 100) + '%';
+            document.getElementById('particleCount').textContent = particles.length;
+            document.getElementById('blockCount').textContent = activeBlocks;
+            document.getElementById('resonance').textContent = activeBlocks === 0 ? 'High' : activeBlocks <= 1 ? 'Medium' : 'Low';
+        }
+        
+        function toggleSource(sourceType) {
+            sources[sourceType] = !sources[sourceType];
+            const button = event.target;
+            button.classList.toggle('active');
+            updateSystemState();
+        }
+        
+        function clearBlock(blockType) {
+            blocks[blockType] = false;
+            const button = event.target;
+            button.classList.remove('blocked');
+            button.classList.add('active');
+            
+            // Hide the visual block
+            const blockElement = document.querySelector(`[data-block="${blockType}"]`);
+            blockElement.style.opacity = '0.3';
+            blockElement.style.animation = 'none';
+            
+            updateSystemState();
+        }
+        
+        function clearAllBlocks() {
+            Object.keys(blocks).forEach(blockType => {
+                blocks[blockType] = false;
+                const blockElement = document.querySelector(`[data-block="${blockType}"]`);
+                blockElement.style.opacity = '0.3';
+                blockElement.style.animation = 'none';
+            });
+            
+            document.querySelectorAll('.control-section.blocks .control-button').forEach(btn => {
+                if (!btn.textContent.includes('Clear All')) {
+                    btn

@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 5: Wealth Plumbing System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 1400px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            position: relative;
+            border: 3px solid #2c3e50;
+        }
+        
+        .blueprint-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #2c3e50;
+        }
+        
+        .title-block {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .drawing-info {
+            text-align: right;
+            font-size: 12px;
+            color: #7f8c8d;
+            line-height: 1.4;
+        }
+        
+        .main-diagram {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin: 30px 0;
+        }
+        
+        .system-view {
+            position: relative;
+            background: white;
+            border: 2px solid #34495e;
+            border-radius: 10px;
+            padding: 20px;
+            min-height: 600px;
+        }
+        
+        .system-title {
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .central-tank {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 120px;
+            height: 180px;
+            border: 4px solid #2980b9;
+            border-radius: 15px;
+            background: linear-gradient(to top, 
+                rgba(52, 152, 219, 0.3) 0%, 
+                rgba(52, 152, 219, 0.6) 70%, 
+                transparent 70%);
+            position: relative;
+        }
+        
+        .tank-level {
+            position: absolute;
+            bottom: 4px;
+            left: 4px;
+            right: 4px;
+            height: 70%;
+            background: linear-gradient(to top, #3498db, #74b9ff);
+            border-radius: 8px;
+            transition: height 0.5s ease;
+        }
+        
+        .tank-label {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 12px;
+            font-weight: bold;
+            color: #2980b9;
+            text-align: center;
+        }
+        
+        .input-pipe {
+            position: absolute;
+            background: #27ae60;
+            border: 2px solid #1e8449;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .pipe-salary {
+            top: 80px;
+            left: 20px;
+            width: 80px;
+            height: 15px;
+            border-radius: 7px;
+        }
+        
+        .pipe-business {
+            top: 150px;
+            left: 20px;
+            width: 80px;
+            height: 15px;
+            border-radius: 7px;
+        }
+        
+        .pipe-investment {
+            top: 220px;
+            left: 20px;
+            width: 80px;
+            height: 15px;
+            border-radius: 7px;
+        }
+        
+        .pipe-gifts {
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 15px;
+            height: 60px;
+            border-radius: 7px;
+        }
+        
+        .output-pipe {
+            position: absolute;
+            background: #e74c3c;
+            border: 2px solid #c0392b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .pipe-bills {
+            bottom: 120px;
+            right: 20px;
+            width: 80px;
+            height: 15px;
+            border-radius: 7px;
+        }
+        
+        .pipe-giving {
+            bottom: 80px;
+            right: 20px;
+            width: 80px;
+            height: 15px;
+            border-radius: 7px;
+        }
+        
+        .pipe-investing {
+            bottom: 40px;
+            right: 20px;
+            width: 80px;
+            height: 15px;
+            border-radius: 7px;
+        }
+        
+        .leak-sensor {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 3px solid #e74c3c;
+            background: rgba(231, 76, 60, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #e74c3c;
+            font-weight: bold;
+            cursor: pointer;
+            animation: alert 2s infinite;
+        }
+        
+        .leak-sensor.fixed {
+            border-color: #27ae60;
+            background: rgba(39, 174, 96, 0.2);
+            color: #27ae60;
+            animation: none;
+        }
+        
+        @keyframes alert {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); box-shadow: 0 0 10px rgba(231, 76, 60, 0.5); }
+        }
+        
+        .sensor-guilt {
+            top: 120px;
+            right: 140px;
+        }
+        
+        .sensor-resentment {
+            bottom: 180px;
+            left: 140px;
+        }
+        
+        .sensor-sabotage {
+            bottom: 120px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .pressure-gauge {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            border: 3px solid #34495e;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .gauge-top {
+            top: 20px;
+            right: 20px;
+        }
+        
+        .gauge-bottom {
+            bottom: 20px;
+            left: 20px;
+        }
+        
+        .gauge-needle {
+            width: 2px;
+            height: 20px;
+            background: #e74c3c;
+            transform-origin: bottom center;
+            transform: rotate(45deg);
+            transition: transform 0.5s ease;
+        }
+        
+        .gauge-label {
+            font-size: 8px;
+            color: #34495e;
+            font-weight: bold;
+            margin-top: 2px;
+        }
+        
+        .flow-indicator {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #3498db;
+            border-radius: 50%;
+            animation: flow 3s linear infinite;
+        }
+        
+        @keyframes flow {
+            0% { opacity: 0; }
+            50% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+        
+        .specifications {
+            background: white;
+            border: 2px solid #34495e;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+        
+        .spec-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            border-bottom: 1px solid #bdc3c7;
+            padding-bottom: 5px;
+        }
+        
+        .spec-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .spec-section {
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid;
+        }
+        
+        .spec-section.input { border-left-color: #27ae60; }
+        .spec-section.output { border-left-color: #e74c3c; }
+        .spec-section.maintenance { border-left-color: #f39c12; }
+        
+        .spec-section h4 {
+            font-size: 12px;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+        
+        .spec-list {
+            font-size: 11px;
+            line-height: 1.4;
+            color: #34495e;
+        }
+        
+        .maintenance-checklist {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .checklist-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: #856404;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+        
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            margin: 8px 0;
+            font-size: 12px;
+            color: #495057;
+        }
+        
+        .checklist-item input[type="checkbox"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+        
+        .system-status {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255,255,255,0.9);
+            padding: 10px;
+            border-radius: 8px;
+            border: 2px solid;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        
+        .status-optimal {
+            border-color: #27ae60;
+            color: #27ae60;
+        }
+        
+        .status-warning {
+            border-color: #f39c12;
+            color: #f39c12;
+        }
+        
+        .status-critical {
+            border-color: #e74c3c;
+            color: #e74c3c;
+        }
+        
+        .legend {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            background: rgba(255,255,255,0.9);
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 10px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 3px 0;
+        }
+        
+        .legend-color {
+            width: 15px;
+            height: 8px;
+            margin-right: 8px;
+            border-radius: 2px;
+        }
+        
+        .controls-panel {
+            background: #ecf0f1;
+            border: 2px solid #34495e;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+        
+        .controls-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+        
+        .control-button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            margin: 5px;
+            border-radius: 5px;
+            font-size: 11px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        
+        .control-button:hover {
+            background: #2980b9;
+        }
+        
+        .control-button.active {
+            background: #27ae60;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="blueprint-header">
+            <div class="title-block">
+                Wealth Energy Flow System<br>
+                <span style="font-size: 16px;">Technical Specifications & Diagnostics</span>
+            </div>
+            <div class="drawing-info">
+                Drawing No: WES-005<br>
+                Scale: 1:1 Conceptual<br>
+                Date: 2024<br>
+                Rev: A<br>
+                Designer: MK
+            </div>
+        </div>
+        
+        <div class="main-diagram">
+            <div class="system-view">
+                <div class="system-title">Current System State</div>
+                <div class="system-status status-warning" id="systemStatus">
+                    ⚠️ System Warning<br>
+                    Multiple Leaks Detected
+                </div>
+                
+                <!-- Central Tank -->
+                <div class="central-tank">
+                    <div class="tank-label">WEALTH<br>CONTAINER</div>
+                    <div class="tank-level" id="tankLevel"></div>
+                </div>
+                
+                <!-- Input Pipes -->
+                <div class="input-pipe pipe-salary">SALARY</div>
+                <div class="input-pipe pipe-business">BUSINESS</div>
+                <div class="input-pipe pipe-investment">INVEST</div>
+                <div class="input-pipe pipe-gifts">GIFTS</div>
+                
+                <!-- Output Pipes -->
+                <div class="output-pipe pipe-bills">BILLS</div>
+                <div class="output-pipe pipe-giving">GIVING</div>
+                <div class="output-pipe pipe-investing">SAVING</div>
+                
+                <!-- Leak Sensors -->
+                <div class="leak-sensor sensor-guilt" id="sensorGuilt" title="Guilt Leak Detected">!</div>
+                <div class="leak-sensor sensor-resentment" id="sensorResentment" title="Resentment Leak Detected">!</div>
+                <div class="leak-sensor sensor-sabotage" id="sensorSabotage" title="Self-Sabotage Leak Detected">!</div>
+                
+                <!-- Pressure Gauges -->
+                <div class="pressure-gauge gauge-top">
+                    <div class="gauge-needle" id="pressureNeedle1"></div>
+                    <div class="gauge-label">PRESSURE</div>
+                </div>
+                
+                <div class="pressure-gauge gauge-bottom">
+                    <div class="gauge-needle" id="pressureNeedle2"></div>
+                    <div class="gauge-label">FLOW RATE</div>
+                </div>
+                
+                <!-- Flow Indicators -->
+                <div class="flow-indicator" style="top: 87px; left: 105px; animation-delay: 0s;"></div>
+                <div class="flow-indicator" style="top: 157px; left: 105px; animation-delay: 1s;"></div>
+                <div class="flow-indicator" style="top: 227px; left: 105px; animation-delay: 2s;"></div>
+                
+                <div class="legend">
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #27ae60;"></div>
+                        <span>Income Flow</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #e74c3c;"></div>
+                        <span>Expenditure</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #f39c12;"></div>
+                        <span>Leak Alert</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="system-view">
+                <div class="system-title">Optimized System (After Repairs)</div>
+                <div class="system-status status-optimal">
+                    ✅ System Optimal<br>
+                    All Leaks Sealed
+                </div>
+                
+                <!-- Central Tank -->
+                <div class="central-tank">
+                    <div class="tank-label">WEALTH<br>CONTAINER</div>
+                    <div class="tank-level" style="height: 90%;"></div>
+                </div>
+                
+                <!-- Input Pipes -->
+                <div class="input-pipe pipe-salary">SALARY</div>
+                <div class="input-pipe pipe-business">BUSINESS</div>
+                <div class="input-pipe pipe-investment">INVEST</div>
+                <div class="input-pipe pipe-gifts">GIFTS</div>
+                
+                <!-- Output Pipes -->
+                <div class="output-pipe pipe-bills">BILLS</div>
+                <div class="output-pipe pipe-giving">GIVING</div>
+                <div class="output-pipe pipe-investing">SAVING</div>
+                
+                <!-- Fixed Sensors -->
+                <div class="leak-sensor sensor-guilt fixed" title="Guilt Leak Sealed">✓</div>
+                <div class="leak-sensor sensor-resentment fixed" title="Resentment Leak Sealed">✓</div>
+                <div class="leak-sensor sensor-sabotage fixed" title="Self-Sabotage Leak Sealed">✓</div>
+                
+                <!-- Pressure Gauges -->
+                <div class="pressure-gauge gauge-top">
+                    <div class="gauge-needle" style="transform: rotate(120deg);"></div>
+                    <div class="gauge-label">PRESSURE</div>
+                </div>
+                
+                <div class="pressure-gauge gauge-bottom">
+                    <div class="gauge-needle" style="transform: rotate(90deg);"></div>
+                    <div class="gauge-label">FLOW RATE</div>
+                </div>
+                
+                <!-- Enhanced Flow Indicators -->
+                <div class="flow-indicator" style="top: 87px; left: 105px; animation-delay: 0s; background: #2ecc71;"></div>
+                <div class="flow-indicator" style="top: 157px; left: 105px; animation-delay: 0.5s; background: #2ecc71;"></div>
+                <div class="flow-indicator" style="top: 227px; left: 105px; animation-delay: 1s; background: #2ecc71;"></div>
+                
+                <div class="legend">
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #2ecc71;"></div>
+                        <span>Optimal Flow</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #27ae60;"></div>
+                        <span>Sealed System</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #3498db;"></div>
+                        <span>High Capacity</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="specifications">
+            <div class="spec-title">System Specifications</div>
+            <div class="spec-grid">
+                <div class="spec-section input">
+                    <h4>Input Sources</h4>
+                    <div class="spec-list">
+                        • Salary Pipeline: 40-60% capacity<br>
+                        • Business Stream: 20-40% capacity<br>
+                        • Investment Flow: 10-20% capacity<br>
+                        • Gift Valve: Variable input<br>
+                        • Recommended: Multiple sources
+                    </div>
+                </div>
+                
+                <div class="spec-section output">
+                    <h4>Output Channels</h4>
+                    <div class="spec-list">
+                        • Essential Bills: 50-70% output<br>
+                        • Conscious Giving: 5-15% output<br>
+                        • Investment Outflow: 10-20% output<br>
+                        • Emergency Reserve: 5-10% hold<br>
+                        • Quality of Life: 10-20% output
+                    </div>
+                </div>
+                
+                <div class="spec-section maintenance">
+                    <h4>Leak Prevention</h4>
+                    <div class="spec-list">
+                        • Guilt Seal: Worthiness work<br>
+                        • Resentment Patch: Forgiveness practice<br>
+                        • Sabotage Valve: Self-awareness<br>
+                        • Arigato Treatment: Gratitude flow<br>
+                        • Regular inspection required
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="maintenance-checklist">
+            <div class="checklist-title">🔧 Preventive Maintenance Checklist</div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="check1">
+                        <label for="check1">Daily Arigato In/Out practice</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="check2">
+                        <label for="check2">Weekly leak sensor inspection</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="check3">
+                        <label for="check3">Monthly flow rate analysis</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="check4">
+                        <label for="check4">Quarterly system capacity review</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="check5">
+                        <label for="check5">Monitor guilt leak indicators</label>
+                    </div>
+                </div>
+                <div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="check6">
+                        <label for="check6">Test resentment patch integrity</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="check7">
+                        <label for="check7">Calibrate self-sabotage sensors</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="check8">
+                        <label for="check8">Pressure gauge maintenance</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="check9">
+                        <label for="check9">Input/Output balance check</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="check10">
+                        <label for="check10">Emergency protocols review</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="controls-panel">
+            <div class="controls-title">🎛️ System Controls</div>
+            <button class="control-button" onclick="repairLeak('guilt')">Repair Guilt Leak</button>
+            <button class="control-button" onclick="repairLeak('resentment')">Repair Resentment Leak</button>
+            <button class="control-button" onclick="repairLeak('sabotage')">Repair Sabotage Leak</button>
+            <button class="control-button" onclick="optimizeSystem()">Optimize Full System</button>
+            <button class="control-button" onclick="resetSystem()">Reset to Default</button>
+        </div>
+    </div>
+
+    <script>
+        let leakStates = {
+            guilt: true,
+            resentment: true,
+            sabotage: true
+        };
+        
+        function updateSystemStatus() {
+            const activeLeaks = Object.values(leakStates).filter(leak => leak).length;
+            const statusElement = document.getElementById('systemStatus');
+            const tankLevel = document.getElementById('tankLevel');
+            const pressure1 = document.getElementById('pressureNeedle1');
+            const pressure2 = document.getElementById('pressureNeedle2');
+            
+            let level, status, rotation1, rotation2;
+            
+            if (activeLeaks === 0) {
+                level = '90%';
+                status = '✅ System Optimal<br>All Leaks Sealed';
+                statusElement.className = 'system-status status-optimal';
+                rotation1 = 'rotate(120deg)';
+                rotation2 = 'rotate(90deg)';
+            } else if (activeLeaks === 1) {
+                level = '75%';
+                status = '⚠️ Minor Leak<br>System Functional';
+                statusElement.className = 'system-status status-warning';
+                rotation1 = 'rotate(80deg)';
+                rotation2 = 'rotate(60deg)';
+            } else if (activeLeaks === 2) {
+                level = '55%';
+                status = '⚠️ System Warning<br>Multiple Leaks';
+                statusElement.className = 'system-status status-warning';
+                rotation1 = 'rotate(50deg)';
+                rotation2 = 'rotate(40deg)';
+            } else {
+                level = '35%';
+                status = '🚨 Critical Alert<br>Severe Leakage';
+                statusElement.className = 'system-status status-critical';
+                rotation1 = 'rotate(20deg)';
+                rotation2 = 'rotate(20deg)';
+            }
+            
+            tankLevel.style.height = level;
+            statusElement.innerHTML = status;
+            pressure1.style.transform = rotation1;
+            pressure2.style.transform = rotation2;
+        }
+        
+        function repairLeak(leakType) {
+            leakStates[leakType] = false;
+            const sensor = document.getElementById('sensor' + leakType.charAt(0).toUpperCase() + leakType.slice(1));
+            sensor.classList.add('fixed');
+            sensor.textContent = '✓';
+            sensor.title = leakType.charAt(0).toUpperCase() + leakType.slice(1) + ' Leak Sealed';
+            updateSystemStatus();
+        }
+        
+        function optimizeSystem() {
+            Object.keys(leakStates).forEach(leak => {
+                leakStates[leak] = false;
+                const sensor = document.getElementById('sensor' + leak.charAt(0).toUpperCase() + leak.slice(1));
+                sensor.classList.add('fixed');
+                sensor.textContent = '✓';
+                sensor.title = leak.charAt(0).toUpperCase() + leak.slice(1) + ' Leak Sealed';
+            });
+            updateSystemStatus();
+        }
+        
+        function resetSystem() {
+            Object.keys(leakStates).forEach(leak => {
+                leakStates[leak] = true;
+                const sensor = document.getElementById('sensor' + leak.charAt(0).toUpperCase() + leak.slice(1));
+                sensor.classList.remove('fixed');
+                sensor.textContent = '!';
+                sensor.title = leak.charAt(0).toUpperCase() + leak.slice(1) + ' Leak Detected';
+            });
+            updateSystemStatus();
+        }
+        
+        // Initialize system
+        updateSystemStatus();
+        
+        // Add click handlers for leak sensors
+        document.querySelectorAll('.leak-sensor').forEach(sensor => {
+            sensor.addEventListener('click', function() {
+                const sensorId = this.id;
+                const leakType = sensorId.replace('sensor', '').toLowerCase();
+                if (leakStates[leakType]) {
+                    repairLeak(leakType);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

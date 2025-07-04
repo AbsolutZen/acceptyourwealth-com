@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 5: Wealth as Energy</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 1200px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3);
+        }
+        
+        .title {
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            text-align: center;
+            font-size: 16px;
+            color: #7f8c8d;
+            margin-bottom: 40px;
+            font-style: italic;
+        }
+        
+        .main-visualization {
+            display: flex;
+            gap: 40px;
+            margin: 40px 0;
+            align-items: flex-start;
+        }
+        
+        .container-section {
+            flex: 2;
+            position: relative;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 20px;
+            padding: 30px;
+            min-height: 600px;
+        }
+        
+        .wealth-container {
+            position: relative;
+            width: 300px;
+            height: 400px;
+            margin: 40px auto;
+            background: linear-gradient(135deg, rgba(116, 185, 255, 0.1), rgba(116, 185, 255, 0.3));
+            border: 4px solid #74b9ff;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .water-level {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            transition: height 1s ease;
+            opacity: 0.7;
+        }
+        
+        .water-surface {
+            position: absolute;
+            top: -5px;
+            left: 0;
+            right: 0;
+            height: 10px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
+            animation: wave 3s ease-in-out infinite;
+        }
+        
+        @keyframes wave {
+            0%, 100% { transform: translateX(-100%); }
+            50% { transform: translateX(100%); }
+        }
+        
+        .income-stream {
+            position: absolute;
+            width: 8px;
+            background: linear-gradient(to bottom, #00b894, #74b9ff);
+            border-radius: 4px;
+            animation: flow 2s linear infinite;
+        }
+        
+        .stream-1 {
+            top: -40px;
+            left: 50px;
+            height: 80px;
+            animation-delay: 0s;
+        }
+        
+        .stream-2 {
+            top: -40px;
+            left: 150px;
+            height: 80px;
+            animation-delay: 0.5s;
+        }
+        
+        .stream-3 {
+            top: -40px;
+            right: 50px;
+            height: 80px;
+            animation-delay: 1s;
+        }
+        
+        @keyframes flow {
+            0% { opacity: 0; transform: translateY(-20px); }
+            50% { opacity: 1; }
+            100% { opacity: 0; transform: translateY(20px); }
+        }
+        
+        .leak {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+        
+        .leak:hover {
+            transform: scale(1.2);
+        }
+        
+        .leak.active {
+            animation: pulse 1.5s infinite;
+        }
+        
+        .leak-guilt {
+            background: radial-gradient(circle, #e74c3c, #c0392b);
+            top: 150px;
+            right: 20px;
+            box-shadow: 0 0 20px rgba(231, 76, 60, 0.6);
+        }
+        
+        .leak-resentment {
+            background: radial-gradient(circle, #8e44ad, #6c3483);
+            top: 250px;
+            left: 15px;
+            box-shadow: 0 0 20px rgba(142, 68, 173, 0.6);
+        }
+        
+        .leak-sabotage {
+            background: radial-gradient(circle, #e67e22, #d35400);
+            top: 320px;
+            right: 30px;
+            box-shadow: 0 0 20px rgba(230, 126, 34, 0.6);
+        }
+        
+        .leak-drip {
+            position: absolute;
+            width: 4px;
+            height: 15px;
+            background: linear-gradient(to bottom, transparent, #e74c3c);
+            left: 50%;
+            transform: translateX(-50%);
+            top: 100%;
+            animation: drip 2s linear infinite;
+        }
+        
+        @keyframes drip {
+            0% { opacity: 0; transform: translateX(-50%) translateY(0); }
+            50% { opacity: 1; }
+            100% { opacity: 0; transform: translateX(-50%) translateY(40px); }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+        
+        .valve {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            border-radius: 50%;
+            border: 3px solid #1e8449;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+        
+        .valve:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(46, 204, 113, 0.4);
+        }
+        
+        .valve-in {
+            top: 20px;
+            left: -20px;
+        }
+        
+        .valve-out {
+            bottom: 20px;
+            right: -20px;
+        }
+        
+        .capacity-indicator {
+            position: absolute;
+            right: -50px;
+            top: 0;
+            height: 100%;
+            width: 30px;
+            background: linear-gradient(to top, #e74c3c 0%, #f39c12 50%, #27ae60 100%);
+            border-radius: 15px;
+            border: 2px solid #34495e;
+        }
+        
+        .capacity-marker {
+            position: absolute;
+            right: -20px;
+            width: 20px;
+            height: 4px;
+            background: #34495e;
+            border-radius: 2px;
+        }
+        
+        .marker-empty { bottom: 0; }
+        .marker-quarter { bottom: 25%; }
+        .marker-half { bottom: 50%; }
+        .marker-three-quarter { bottom: 75%; }
+        .marker-full { bottom: 100%; }
+        
+        .controls-section {
+            flex: 1;
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            border: 2px solid #e9ecef;
+        }
+        
+        .controls-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .control-group {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid;
+        }
+        
+        .control-group.income { border-left-color: #27ae60; }
+        .control-group.leaks { border-left-color: #e74c3c; }
+        .control-group.valves { border-left-color: #3498db; }
+        
+        .control-label {
+            font-size: 14px;
+            font-weight: bold;
+            color: #495057;
+            margin-bottom: 10px;
+        }
+        
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+            margin: 5px 10px 5px 0;
+        }
+        
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: #27ae60;
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        
+        .leak-info {
+            display: none;
+            background: rgba(0,0,0,0.9);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            position: absolute;
+            z-index: 100;
+            max-width: 250px;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        
+        .leak-info.show {
+            display: block;
+        }
+        
+        .arigato-section {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            margin: 30px 0;
+            text-align: center;
+        }
+        
+        .arigato-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .arigato-practice {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .arigato-box {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .arigato-emoji {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        
+        .status-display {
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background: #e8f5e8;
+            border-radius: 10px;
+            border: 2px solid #27ae60;
+        }
+        
+        .status-text {
+            font-size: 16px;
+            font-weight: bold;
+            color: #27ae60;
+        }
+        
+        .level-percentage {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2980b9;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">Chapter 5: Wealth as Energy</h1>
+        <p class="subtitle">Interactive Container: Understanding flow, leaks, and energy patterns</p>
+        
+        <div class="main-visualization">
+            <div class="container-section">
+                <h3 style="text-align: center; color: #495057; margin-bottom: 20px;">Your Wealth Container</h3>
+                
+                <div class="wealth-container" id="wealthContainer">
+                    <!-- Income Streams -->
+                    <div class="income-stream stream-1" id="stream1"></div>
+                    <div class="income-stream stream-2" id="stream2"></div>
+                    <div class="income-stream stream-3" id="stream3"></div>
+                    
+                    <!-- Water Level -->
+                    <div class="water-level" id="waterLevel" style="height: 60%;">
+                        <div class="water-surface"></div>
+                    </div>
+                    
+                    <!-- Leaks -->
+                    <div class="leak leak-guilt active" id="leakGuilt" data-leak="guilt">
+                        <div class="leak-drip"></div>
+                    </div>
+                    <div class="leak leak-resentment active" id="leakResentment" data-leak="resentment">
+                        <div class="leak-drip"></div>
+                    </div>
+                    <div class="leak leak-sabotage active" id="leakSabotage" data-leak="sabotage">
+                        <div class="leak-drip"></div>
+                    </div>
+                    
+                    <!-- Valves -->
+                    <div class="valve valve-in" id="valveIn" title="Arigato In">IN</div>
+                    <div class="valve valve-out" id="valveOut" title="Arigato Out">OUT</div>
+                    
+                    <!-- Capacity Indicator -->
+                    <div class="capacity-indicator">
+                        <div class="capacity-marker marker-empty"></div>
+                        <div class="capacity-marker marker-quarter"></div>
+                        <div class="capacity-marker marker-half"></div>
+                        <div class="capacity-marker marker-three-quarter"></div>
+                        <div class="capacity-marker marker-full"></div>
+                    </div>
+                </div>
+                
+                <div class="status-display">
+                    <div class="status-text" id="statusText">Container Status: Moderate Leakage</div>
+                    <div class="level-percentage" id="levelPercentage">Capacity: 60%</div>
+                </div>
+            </div>
+            
+            <div class="controls-section">
+                <h3 class="controls-title">🔧 Container Controls</h3>
+                
+                <div class="control-group income">
+                    <div class="control-label">💰 Income Streams</div>
+                    <label class="switch">
+                        <input type="checkbox" id="salaryStream" checked>
+                        <span class="slider"></span>
+                    </label>
+                    <span>Salary</span><br>
+                    
+                    <label class="switch">
+                        <input type="checkbox" id="businessStream" checked>
+                        <span class="slider"></span>
+                    </label>
+                    <span>Business</span><br>
+                    
+                    <label class="switch">
+                        <input type="checkbox" id="investmentStream" checked>
+                        <span class="slider"></span>
+                    </label>
+                    <span>Investments</span>
+                </div>
+                
+                <div class="control-group leaks">
+                    <div class="control-label">🚰 Repair Energy Leaks</div>
+                    <label class="switch">
+                        <input type="checkbox" id="fixGuilt">
+                        <span class="slider"></span>
+                    </label>
+                    <span>Fix Guilt Leak</span><br>
+                    
+                    <label class="switch">
+                        <input type="checkbox" id="fixResentment">
+                        <span class="slider"></span>
+                    </label>
+                    <span>Fix Resentment Leak</span><br>
+                    
+                    <label class="switch">
+                        <input type="checkbox" id="fixSabotage">
+                        <span class="slider"></span>
+                    </label>
+                    <span>Fix Self-Sabotage Leak</span>
+                </div>
+                
+                <div class="control-group valves">
+                    <div class="control-label">🙏 Arigato Practice</div>
+                    <label class="switch">
+                        <input type="checkbox" id="arigatoIn">
+                        <span class="slider"></span>
+                    </label>
+                    <span>Arigato In (Gratitude for receiving)</span><br>
+                    
+                    <label class="switch">
+                        <input type="checkbox" id="arigatoOut">
+                        <span class="slider"></span>
+                    </label>
+                    <span>Arigato Out (Gratitude for giving)</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="arigato-section">
+            <h3 class="arigato-title">🙏 The Arigato Practice</h3>
+            <p style="opacity: 0.9; margin-bottom: 20px;">
+                Transform every financial transaction into conscious gratitude. Watch how it changes your container's energy flow.
+            </p>
+            
+            <div class="arigato-practice">
+                <div class="arigato-box">
+                    <div class="arigato-emoji">💰➡️</div>
+                    <h4>Arigato In</h4>
+                    <p>Every time money flows in: "Thank you for this abundance"</p>
+                </div>
+                
+                <div class="arigato-box">
+                    <div class="arigato-emoji">💰⬅️</div>
+                    <h4>Arigato Out</h4>
+                    <p>Every time money flows out: "Thank you for this exchange"</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Leak Info Tooltips -->
+        <div class="leak-info" id="leakTooltip"></div>
+    </div>
+
+    <script>
+        // Interactive functionality
+        let currentLevel = 60;
+        let activeLeaks = new Set(['guilt', 'resentment', 'sabotage']);
+        let activeStreams = new Set(['salary', 'business', 'investment']);
+        let arigatoPractice = new Set();
+        
+        function updateContainer() {
+            // Calculate level based on streams and leaks
+            let inflow = activeStreams.size * 15;
+            let outflow = activeLeaks.size * 10;
+            let arigatoBonus = arigatoPractice.size * 5;
+            
+            let targetLevel = Math.min(95, Math.max(5, inflow - outflow + arigatoBonus));
+            currentLevel = targetLevel;
+            
+            // Update visual
+            const waterLevel = document.getElementById('waterLevel');
+            waterLevel.style.height = currentLevel + '%';
+            
+            // Update status
+            updateStatus();
+            
+            // Update leak visibility
+            updateLeaks();
+            
+            // Update streams
+            updateStreams();
+        }
+        
+        function updateStatus() {
+            const statusText = document.getElementById('statusText');
+            const levelPercentage = document.getElementById('levelPercentage');
+            
+            let status;
+            if (currentLevel < 30) {
+                status = "Critical: Severe Energy Depletion";
+                statusText.style.color = '#e74c3c';
+            } else if (currentLevel < 60) {
+                status = "Warning: Moderate Leakage";
+                statusText.style.color = '#f39c12';
+            } else if (currentLevel < 85) {
+                status = "Good: Healthy Flow";
+                statusText.style.color = '#27ae60';
+            } else {
+                status = "Excellent: Optimal Abundance";
+                statusText.style.color = '#2ecc71';
+            }
+            
+            statusText.textContent = "Container Status: " + status;
+            levelPercentage.textContent = "Capacity: " + Math.round(currentLevel) + "%";
+        }
+        
+        function updateLeaks() {
+            ['guilt', 'resentment', 'sabotage'].forEach(leak => {
+                const element = document.getElementById('leak' + leak.charAt(0).toUpperCase() + leak.slice(1));
+                if (activeLeaks.has(leak)) {
+                    element.classList.add('active');
+                    element.style.opacity = '1';
+                } else {
+                    element.classList.remove('active');
+                    element.style.opacity = '0.3';
+                }
+            });
+        }
+        
+        function updateStreams() {
+            ['1', '2', '3'].forEach((num, index) => {
+                const stream = document.getElementById('stream' + num);
+                const streamTypes = ['salary', 'business', 'investment'];
+                if (activeStreams.has(streamTypes[index])) {
+                    stream.style.opacity = '1';
+                } else {
+                    stream.style.opacity = '0.3';
+                }
+            });
+        }
+        
+        // Event listeners for controls
+        document.getElementById('salaryStream').addEventListener('change', function() {
+            if (this.checked) activeStreams.add('salary');
+            else activeStreams.delete('salary');
+            updateContainer();
+        });
+        
+        document.getElementById('businessStream').addEventListener('change', function() {
+            if (this.checked) activeStreams.add('business');
+            else activeStreams.delete('business');
+            updateContainer();
+        });
+        
+        document.getElementById('investmentStream').addEventListener('change', function() {
+            if (this.checked) activeStreams.add('investment');
+            else activeStreams.delete('investment');
+            updateContainer();
+        });
+        
+        document.getElementById('fixGuilt').addEventListener('change', function() {
+            if (this.checked) activeLeaks.delete('guilt');
+            else activeLeaks.add('guilt');
+            updateContainer();
+        });
+        
+        document.getElementById('fixResentment').addEventListener('change', function() {
+            if (this.checked) activeLeaks.delete('resentment');
+            else activeLeaks.add('resentment');
+            updateContainer();
+        });
+        
+        document.getElementById('fixSabotage').addEventListener('change', function() {
+            if (this.checked) activeLeaks.delete('sabotage');
+            else activeLeaks.add('sabotage');
+            updateContainer();
+        });
+        
+        document.getElementById('arigatoIn').addEventListener('change', function() {
+            if (this.checked) arigatoPractice.add('in');
+            else arigatoPractice.delete('in');
+            updateContainer();
+        });
+        
+        document.getElementById('arigatoOut').addEventListener('change', function() {
+            if (this.checked) arigatoPractice.add('out');
+            else arigatoPractice.delete('out');
+            updateContainer();
+        });
+        
+        // Leak hover tooltips
+        const leakInfo = {
+            guilt: "Guilt Leak: Every time you receive money but feel bad about it, you're pushing wealth away. The guilt says 'I don't deserve this.'",
+            resentment: "Resentment Leak: When you resent others for having what you want, you create an energetic wall between yourself and abundance.",
+            sabotage: "Self-Sabotage Leak: Unconsciously destroying what you're consciously trying to build. This happens when your goals conflict with your programming."
+        };
+        
+        document.querySelectorAll('.leak').forEach(leak => {
+            leak.addEventListener('mouseenter', function() {
+                const tooltip = document.getElementById('leakTooltip');
+                const leakType = this.getAttribute('data-leak');
+                tooltip.textContent = leakInfo[leakType];
+                tooltip.classList.add('show');
+                
+                const rect = this.getBoundingClientRect();
+                tooltip.style.left = (rect.left + 30) + 'px';
+                tooltip.style.top = (rect.top - 50) + 'px';
+            });
+            
+            leak.addEventListener('mouseleave', function() {
+                document.getElementById('leakTooltip').classList.remove('show');
+            });
+        });
+        
+        // Valve animations
+        document.querySelectorAll('.valve').forEach(valve => {
+            valve.addEventListener('click', function() {
+                this.style.transform = 'scale(0.9)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1.1)';
+                    setTimeout(() => {
+                        this.style.transform = 'scale(1)';
+                    }, 150);
+                }, 150);
+            });
+        });
+        
+        // Initialize
+        updateContainer();
+    </script>
+</body>
+</html>
