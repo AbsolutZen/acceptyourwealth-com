@@ -1,644 +1,724 @@
- <!DOCTYPE html>
-  <html lang="en">
-  <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Accept Your Wealth - Interactive Ebook Reader</title>
-      <style>
-          * {
-              margin: 0;
-              padding: 0;
-              box-sizing: border-box;
-          }
-
-          body {
-              font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-              line-height: 1.6;
-              color: #333;
-              background: #f8f9fa;
-          }
-
-          .header {
-              background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-              color: white;
-              padding: 20px 0;
-              box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-          }
-
-          .header .container {
-              max-width: 1200px;
-              margin: 0 auto;
-              padding: 0 20px;
-              display: flex;
-              justify-content: space-between;
-              align-items: center;
-          }
-
-          .header h1 {
-              font-size: 1.8rem;
-          }
-
-          .progress-bar {
-              background: rgba(255,255,255,0.2);
-              height: 8px;
-              border-radius: 4px;
-              width: 200px;
-              overflow: hidden;
-          }
-
-          .progress-fill {
-              background: #ff6b6b;
-              height: 100%;
-              width: 0%;
-              transition: width 0.3s ease;
-              border-radius: 4px;
-          }
-
-          .main-container {
-              max-width: 1200px;
-              margin: 0 auto;
-              display: grid;
-              grid-template-columns: 250px 1fr;
-              gap: 30px;
-              padding: 30px 20px;
-              min-height: calc(100vh - 120px);
-          }
-
-          .sidebar {
-              background: white;
-              border-radius: 15px;
-              padding: 30px;
-              box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-              height: fit-content;
-              position: sticky;
-              top: 30px;
-          }
-
-          .sidebar h2 {
-              color: #667eea;
-              margin-bottom: 20px;
-              font-size: 1.2rem;
-          }
-
-          .chapter-list {
-              list-style: none;
-          }
-
-          .chapter-item {
-              margin-bottom: 8px;
-          }
-
-          .chapter-link {
-              display: block;
-              padding: 12px 15px;
-              text-decoration: none;
-              color: #666;
-              border-radius: 8px;
-              transition: all 0.3s ease;
-              font-size: 0.95rem;
-          }
-
-          .chapter-link:hover {
-              background: #f0f0f0;
-              color: #667eea;
-          }
-
-          .chapter-link.active {
-              background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-              color: white;
-          }
-
-          .chapter-link.interactive {
-              position: relative;
-          }
-
-          .chapter-link.interactive::after {
-              content: "🎯";
-              position: absolute;
-              right: 15px;
-              top: 50%;
-              transform: translateY(-50%);
-          }
-
-          .content-area {
-              background: white;
-              border-radius: 15px;
-              padding: 40px;
-              box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-              min-height: 600px;
-          }
-
-          .welcome-screen {
-              text-align: center;
-              padding: 60px 20px;
-          }
-
-          .welcome-screen h2 {
-              color: #667eea;
-              font-size: 2.5rem;
-              margin-bottom: 20px;
-          }
-
-          .welcome-screen p {
-              font-size: 1.2rem;
-              color: #666;
-              margin-bottom: 30px;
-          }
-
-          .start-reading {
-              display: inline-block;
-              background: linear-gradient(45deg, #ff6b6b, #ee5a24);
-              color: white;
-              padding: 15px 30px;
-              text-decoration: none;
-              border-radius: 25px;
-              font-weight: 600;
-              transition: all 0.3s ease;
-          }
-
-          .start-reading:hover {
-              transform: translateY(-2px);
-              box-shadow: 0 8px 25px rgba(238, 90, 36, 0.3);
-          }
-
-          .chapter-content {
-              display: none;
-          }
-
-          .chapter-content.active {
-              display: block;
-          }
-
-          .chapter-content h3 {
-              color: #667eea;
-              font-size: 1.8rem;
-              margin-bottom: 20px;
-          }
-
-          .chapter-content p {
-              margin-bottom: 20px;
-              font-size: 1.1rem;
-              line-height: 1.8;
-          }
-
-          .interactive-exercise {
-              background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-              color: white;
-              padding: 30px;
-              border-radius: 15px;
-              margin: 30px 0;
-              text-align: center;
-          }
-
-          .interactive-exercise h4 {
-              font-size: 1.3rem;
-              margin-bottom: 15px;
-          }
-
-          .exercise-button {
-              display: inline-block;
-              background: white;
-              color: #f5576c;
-              padding: 12px 25px;
-              text-decoration: none;
-              border-radius: 20px;
-              font-weight: 600;
-              margin-top: 15px;
-              transition: all 0.3s ease;
-          }
-
-          .exercise-button:hover {
-              transform: translateY(-2px);
-              box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-          }
-
-          .navigation {
-              display: flex;
-              justify-content: space-between;
-              margin-top: 40px;
-              padding-top: 30px;
-              border-top: 1px solid #eee;
-          }
-
-          .nav-button {
-              background: #667eea;
-              color: white;
-              padding: 12px 25px;
-              text-decoration: none;
-              border-radius: 8px;
-              font-weight: 600;
-              transition: all 0.3s ease;
-          }
-
-          .nav-button:hover {
-              background: #5a6fd8;
-              transform: translateY(-1px);
-          }
-
-          .nav-button:disabled {
-              background: #ccc;
-              cursor: not-allowed;
-          }
-
-          @media (max-width: 968px) {
-              .main-container {
-                  grid-template-columns: 1fr;
-                  gap: 20px;
-              }
-
-              .sidebar {
-                  position: static;
-              }
-
-              .header .container {
-                  flex-direction: column;
-                  gap: 15px;
-              }
-          }
-      </style>
-  </head>
-  <body>
-      <header class="header">
-          <div class="container">
-              <h1>Accept Your Wealth</h1>
-              <div class="progress-bar">
-                  <div class="progress-fill" id="progressFill"></div>
-              </div>
-          </div>
-      </header>
-
-      <div class="main-container">
-          <aside class="sidebar">
-              <h2>Table of Contents</h2>
-              <ul class="chapter-list" id="chapterList">
-                  <li class="chapter-item">
-                      <a href="#welcome" class="chapter-link active">Welcome</a>
-                  </li>
-                  <li class="chapter-item">
-                      <a href="#preface" class="chapter-link">Preface</a>
-                  </li>
-                  <li class="chapter-item">
-                      <a href="#chapter1" class="chapter-link interactive">Chapter 1: The
-  Wake-Up Moment</a>
-                  </li>
-                  <li class="chapter-item">
-                      <a href="#chapter2" class="chapter-link interactive">Chapter 2: Money
-  as Emotion</a>
-                  </li>
-                  <li class="chapter-item">
-                      <a href="#chapter3" class="chapter-link interactive">Chapter 3: Inner
-  Safety First</a>
-                  </li>
-                  <li class="chapter-item">
-                      <a href="#chapter4" class="chapter-link interactive">Chapter 4:
-  Rewriting the Story</a>
-                  </li>
-                  <li class="chapter-item">
-                      <a href="#chapter5" class="chapter-link interactive">Chapter 5: Wealth
-  as Energy</a>
-                  </li>
-                  <li class="chapter-item">
-                      <a href="#chapter6" class="chapter-link">Chapter 6: Scarcity
-  Addiction</a>
-                  </li>
-                  <li class="chapter-item">
-                      <a href="#chapter7" class="chapter-link">Chapter 7: The Enough
-  Point</a>
-                  </li>
-                  <li class="chapter-item">
-                      <a href="#chapter8" class="chapter-link">Chapter 8: Financial
-  Intimacy</a>
-                  </li>
-                  <li class="chapter-item">
-                      <a href="#chapter9" class="chapter-link">Chapter 9: Healing the
-  Hustle</a>
-                  </li>
-                  <li class="chapter-item">
-                      <a href="#chapter10" class="chapter-link">Chapter 10: Your Inner
-  Banker</a>
-                  </li>
-                  <li class="chapter-item">
-                      <a href="#chapter11" class="chapter-link">Chapter 11: Soul-Aligned
-  Earning</a>
-                  </li>
-                  <li class="chapter-item">
-                      <a href="#chapter12" class="chapter-link">Chapter 12: Receiving Without
-   Guilt</a>
-                  </li>
-                  <li class="chapter-item">
-                      <a href="#chapter13" class="chapter-link">Chapter 13: Spiritual
-  Sales</a>
-                  </li>
-                  <li class="chapter-item">
-                      <a href="#chapter14" class="chapter-link">Chapter 14: Money and
-  Identity</a>
-                  </li>
-                  <li class="chapter-item">
-                      <a href="#chapter15" class="chapter-link">Chapter 15: Holding
-  Wealth</a>
-                  </li>
-                  <li class="chapter-item">
-                      <a href="#chapter16" class="chapter-link">Chapter 16: Legacy and
-  Lineage</a>
-                  </li>
-                  <li class="chapter-item">
-                      <a href="#chapter17" class="chapter-link">Chapter 17: Reparenting Your
-  Wallet</a>
-                  </li>
-                  <li class="chapter-item">
-                      <a href="#chapter18" class="chapter-link">Chapter 18: Leading with
-  Wealth</a>
-                  </li>
-                  <li class="chapter-item">
-                      <a href="#chapter19" class="chapter-link">Chapter 19: Quantum
-  Generosity</a>
-                  </li>
-                  <li class="chapter-item">
-                      <a href="#chapter20" class="chapter-link">Chapter 20: The Wealthy
-  Self</a>
-                  </li>
-                  <li class="chapter-item">
-                      <a href="#bonus1" class="chapter-link">Bonus 1: Jordan Syndrome</a>
-                  </li>
-                  <li class="chapter-item">
-                      <a href="#bonus2" class="chapter-link">Bonus 2: Connecting Dots</a>
-                  </li>
-                  <li class="chapter-item">
-                      <a href="#bonus3" class="chapter-link">Bonus 3: Dead Horse</a>
-                  </li>
-                  <li class="chapter-item">
-                      <a href="#final" class="chapter-link">Final Thoughts</a>
-                  </li>
-                  <li class="chapter-item">
-                      <a href="#bonus" class="chapter-link interactive">Interactive: Wealth
-  Quiz</a>
-                  </li>
-              </ul>
-          </aside>
-
-          <main class="content-area">
-              <div id="welcome" class="chapter-content welcome-screen active">
-                  <h2>Welcome to Your Transformation Journey</h2>
-                  <p>You've taken the first step toward transforming your relationship with
-  money. This interactive ebook will guide you through a deep exploration of your financial
-  psychology.</p>
-                  <p>Each chapter includes powerful exercises, visualizations, and tools
-  designed to help you uncover and heal your money blocks.</p>
-                  <a href="#chapter1" class="start-reading" 
-  onclick="showChapter('chapter1')">Start Reading</a>
-              </div>
-
-              <div id="preface" class="chapter-content">
-                  <iframe src="https://docs.google.com/document/d/1R6hIJj7R6294riVpXL5rdXUDE5
-  O9OdaLzPKcrgtWdGQ/preview" width="100%" height="600" frameborder="0"></iframe>
-              </div>
-
-              <div id="chapter1" class="chapter-content">
-                  <iframe src="https://docs.google.com/document/d/1qxo_0PMnjgJB5AVQCFhdBkLnKx
-  ebi3e8ORNi9xaPmU0/preview" width="100%" height="600" frameborder="0"></iframe>
-
-                  <div class="interactive-exercise">
-                      <h4>🎯 Interactive Visualization Exercise</h4>
-                      <p>Discover your hidden wealth blocks through our powerful
-  visualization tool.</p>
-                      <a href="chapter1_visualization.html" target="_blank" 
-  class="exercise-button">Start Visualization</a>
-                  </div>
-              </div>
-
-              <div id="chapter2" class="chapter-content">
-                  <iframe src="https://docs.google.com/document/d/1YN8843EqtwGYXNf_LAaamIP3hJ
-  RBqJcV05y-04g7dGc/preview" width="100%" height="600" frameborder="0"></iframe>
-
-                  <div class="interactive-exercise">
-                      <h4>🎯 Money Emotion Wheel</h4>
-                      <p>Map your emotional relationship with money using our interactive
-  emotion wheel.</p>
-                      <a href="chapter2_money_emotion_wheel.html" target="_blank" 
-  class="exercise-button">Explore Your Emotions</a>
-                  </div>
-              </div>
-
-              <div id="chapter3" class="chapter-content">
-                  <iframe src="https://docs.google.com/document/d/1Q-DMQRuXmtjm2OjzG1n60NfDTR
-  CpwPVjeHuNNsQbBGQ/preview" width="100%" height="600" frameborder="0"></iframe>
-
-                  <div class="interactive-exercise">
-                      <h4>🎯 Inner Safety Meter</h4>
-                      <p>Assess your current level of inner safety and identify areas for
-  healing.</p>
-                      <a href="chapter3_inner_safety_meter.html" target="_blank" 
-  class="exercise-button">Check Your Safety Level</a>
-                  </div>
-              </div>
-
-              <div id="chapter4" class="chapter-content">
-                  <iframe src="https://docs.google.com/document/d/1RB6U9JUY9Wv9P2nlwQD7kUmaDb
-  5sdjpiex0cin8FYhc/preview" width="100%" height="600" frameborder="0"></iframe>
-
-                  <div class="interactive-exercise">
-                      <h4>🎯 Family Money Tree</h4>
-                      <p>Explore your family's money patterns and rewrite your story.</p>
-                      <a href="chapter4_family_money_tree.html" target="_blank" 
-  class="exercise-button">Map Your Money Story</a>
-                  </div>
-              </div>
-
-              <div id="chapter5" class="chapter-content">
-                  <iframe src="https://docs.google.com/document/d/1kERv-xhFowBnZWkTurmTvjjGis
-  II73Kj5NXSSMSC0GU/preview" width="100%" height="600" frameborder="0"></iframe>
-
-                  <div class="interactive-exercise">
-                      <h4>🎯 Wealth as Energy Exercises</h4>
-                      <p>Experience wealth as energy through multiple interactive tools.</p>
-                      <a href="chapter5_wealth_container.html" target="_blank" 
-  class="exercise-button">Wealth Container</a>
-                      <a href="chapter5_energy_particles.html" target="_blank" 
-  class="exercise-button">Energy Particles</a>
-                      <a href="chapter5_health_dashboard.html" target="_blank" 
-  class="exercise-button">Health Dashboard</a>
-                  </div>
-              </div>
-
-              <div id="chapter6" class="chapter-content">
-                  <iframe src="https://docs.google.com/document/d/1wC8qOuToCf-eXaTzgFlmJFRxW2
-  mFFywlhpLqdahn5PQ/preview" width="100%" height="600" frameborder="0"></iframe>
-              </div>
-
-              <div id="chapter7" class="chapter-content">
-                  <iframe src="https://docs.google.com/document/d/15xOsNJXjqfosqjIh4xtIlgMcPV
-  R3JYEVFgkf3l6Ch7Q/preview" width="100%" height="600" frameborder="0"></iframe>
-              </div>
-
-              <div id="chapter8" class="chapter-content">
-                  <iframe src="https://docs.google.com/document/d/1y6K096PpE1oCd3X9kqJ5qwox15
-  xFgboL-ci8_Zxdcvc/preview" width="100%" height="600" frameborder="0"></iframe>
-              </div>
-
-              <div id="chapter9" class="chapter-content">
-                  <iframe src="https://docs.google.com/document/d/130ZOOz66scl9luk0raf2TGDfnf
-  j19iaYOtuZuf53UBk/preview" width="100%" height="600" frameborder="0"></iframe>
-              </div>
-
-              <div id="chapter10" class="chapter-content">
-                  <iframe src="https://docs.google.com/document/d/1LvUnRaLHrv3_eyj_ZKvY1Cxh9N
-  jFgVjumClrGafF580/preview" width="100%" height="600" frameborder="0"></iframe>
-              </div>
-
-              <div id="chapter11" class="chapter-content">
-                  <iframe src="https://docs.google.com/document/d/1s1H_Xg9lNTXkXbkxtgNcrAhXlP
-  Dv9WiIM8ucOt_LIjA/preview" width="100%" height="600" frameborder="0"></iframe>
-              </div>
-
-              <div id="chapter12" class="chapter-content">
-                  <iframe src="https://docs.google.com/document/d/125bUN01MigX7_5k5NJvejc_mQZ
-  WLWYw3Ywi7CO_PGkg/preview" width="100%" height="600" frameborder="0"></iframe>
-              </div>
-
-              <div id="chapter13" class="chapter-content">
-                  <iframe src="https://docs.google.com/document/d/1v_laIj_DqJwHK2NHr_CxK2a_Rk
-  Y0nQ47MCLFgbDwIQY/preview" width="100%" height="600" frameborder="0"></iframe>
-              </div>
-
-              <div id="chapter14" class="chapter-content">
-                  <iframe src="https://docs.google.com/document/d/1_vfhJXNaaBpgGowkNUUImY3bca
-  cAIXtLAzJHVq0QKww/preview" width="100%" height="600" frameborder="0"></iframe>
-              </div>
-
-              <div id="chapter15" class="chapter-content">
-                  <iframe src="https://docs.google.com/document/d/1JUqHeaD8MMaJfzD_85OjBbSKJa
-  QLCkgTdrSh6zQS1ew/preview" width="100%" height="600" frameborder="0"></iframe>
-              </div>
-
-              <div id="chapter16" class="chapter-content">
-                  <iframe src="https://docs.google.com/document/d/1FYZCJKgzrDnIGm_yfP3a3vBnUY
-  5fABs1MEgcG_k-DPE/preview" width="100%" height="600" frameborder="0"></iframe>
-              </div>
-
-              <div id="chapter17" class="chapter-content">
-                  <iframe src="https://docs.google.com/document/d/1_VPUfNKypvdQ3xz2ZTXCchmjwg
-  qYy9YKcCZ-fR-3Gn8/preview" width="100%" height="600" frameborder="0"></iframe>
-              </div>
-
-              <div id="chapter18" class="chapter-content">
-                  <iframe src="https://docs.google.com/document/d/1EUNmnxCJm2Bf8DhFliYxvrmWiw
-  jGGGr07bCMKaoT0-c/preview" width="100%" height="600" frameborder="0"></iframe>
-              </div>
-
-              <div id="chapter19" class="chapter-content">
-                  <iframe src="https://docs.google.com/document/d/1ZRC9ScAN-BveRI1LevCyWn5S_q
-  YrFfFmyTJVPRVbBLI/preview" width="100%" height="600" frameborder="0"></iframe>
-              </div>
-
-              <div id="chapter20" class="chapter-content">
-                  <iframe src="https://docs.google.com/document/d/1A2jmScmUj2n_qf0IwHxRAxVARs
-  PGuHtELQ2R2kF6CaU/preview" width="100%" height="600" frameborder="0"></iframe>
-              </div>
-
-              <div id="bonus1" class="chapter-content">
-                  <iframe src="https://docs.google.com/document/d/1WhjGgjbACbpSHjJBaPFCDMhQEU
-  fRNy1iktPOXSu656Y/preview" width="100%" height="600" frameborder="0"></iframe>
-              </div>
-
-              <div id="bonus2" class="chapter-content">
-                  <iframe src="https://docs.google.com/document/d/1sJ9jyoLz3HOGyraPz1MAe2HB8V
-  h38fNSzoaN6RKOqWg/preview" width="100%" height="600" frameborder="0"></iframe>
-              </div>
-
-              <div id="bonus3" class="chapter-content">
-                  <iframe src="https://docs.google.com/document/d/1xiBkaMm29YqPKAJ-u7jsncx_R_
-  F2MtzN4846Uk-XFzY/preview" width="100%" height="600" frameborder="0"></iframe>
-              </div>
-
-              <div id="final" class="chapter-content">
-                  <iframe src="https://docs.google.com/document/d/1H8gmTeEXWGHUOObqIF1iBa4t1t
-  wlDCguTIy0-tVV74o/preview" width="100%" height="600" frameborder="0"></iframe>
-              </div>
-
-              <div class="navigation">
-                  <a href="#" class="nav-button" id="prevButton" onclick="previousChapter()" 
-  style="visibility: hidden;">← Previous</a>
-                  <a href="#" class="nav-button" id="nextButton" onclick="nextChapter()">Next
-   →</a>
-              </div>
-          </main>
-      </div>
-
-      <script>
-          const chapters = ['welcome', 'preface', 'chapter1', 'chapter2', 'chapter3',
-  'chapter4', 'chapter5', 'chapter6', 'chapter7', 'chapter8', 'chapter9', 'chapter10',
-  'chapter11', 'chapter12', 'chapter13', 'chapter14', 'chapter15', 'chapter16', 'chapter17',
-  'chapter18', 'chapter19', 'chapter20', 'bonus1', 'bonus2', 'bonus3', 'final', 'bonus'];
-          let currentChapterIndex = 0;
-
-          function showChapter(chapterId) {
-              // Hide all chapters
-              document.querySelectorAll('.chapter-content').forEach(chapter => {
-                  chapter.classList.remove('active');
-              });
-
-              // Show selected chapter
-              document.getElementById(chapterId).classList.add('active');
-
-              // Update navigation
-              currentChapterIndex = chapters.indexOf(chapterId);
-              updateNavigation();
-
-              // Update sidebar active state
-              document.querySelectorAll('.chapter-link').forEach(link => {
-                  link.classList.remove('active');
-              });
-              document.querySelector(`a[href="#${chapterId}"]`).classList.add('active');
-
-              // Update progress
-              updateProgress();
-
-              // Save progress
-              localStorage.setItem('currentChapter', chapterId);
-          }
-
-          function nextChapter() {
-              if (currentChapterIndex < chapters.length - 1) {
-                  showChapter(chapters[currentChapterIndex + 1]);
-              }
-          }
-
-          function previousChapter() {
-              if (currentChapterIndex > 0) {
-                  showChapter(chapters[currentChapterIndex - 1]);
-              }
-          }
-
-          function updateNavigation() {
-              const prevButton = document.getElementById('prevButton');
-              const nextButton = document.getElementById('nextButton');
-
-              prevButton.style.visibility = currentChapterIndex > 0 ? 'visible' : 'hidden';
-              nextButton.style.visibility = currentChapterIndex < chapters.length - 1 ?
-  'visible' : 'hidden';
-          }
-
-          function updateProgress() {
-              const progress = (currentChapterIndex / (chapters.length - 1)) * 100;
-              document.getElementById('progressFill').style.width = progress + '%';
-          }
-
-          // Chapter navigation clicks
-          document.querySelectorAll('.chapter-link').forEach(link => {
-              link.addEventListener('click', (e) => {
-                  e.preventDefault();
-                  const chapterId = link.getAttribute('href').substring(1);
-                  showChapter(chapterId);
-              });
-          });
-
-          // Load saved progress
-          window.addEventListener('load', () => {
-              const savedChapter = localStorage.getItem('currentChapter');
-              if (savedChapter && chapters.includes(savedChapter)) {
-                  showChapter(savedChapter);
-              }
-          });
-      </script>
-  </body>
-  </html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accept Your Wealth - Interactive Ebook Reader</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8f9fa;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+        }
+
+        .progress-bar {
+            background: rgba(255,255,255,0.2);
+            height: 8px;
+            border-radius: 4px;
+            width: 200px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: #ff6b6b;
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 4px;
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 30px;
+            padding: 30px 20px;
+            min-height: calc(100vh - 120px);
+        }
+
+        .sidebar {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            height: fit-content;
+            position: sticky;
+            top: 30px;
+        }
+
+        .sidebar h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+
+        .chapter-list {
+            list-style: none;
+        }
+
+        .chapter-item {
+            margin-bottom: 8px;
+        }
+
+        .chapter-link {
+            display: block;
+            padding: 12px 15px;
+            text-decoration: none;
+            color: #666;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .chapter-link:hover {
+            background: #f0f0f0;
+            color: #667eea;
+        }
+
+        .chapter-link.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .chapter-link.interactive {
+            position: relative;
+        }
+
+        .chapter-link.interactive::after {
+            content: "🎯";
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .content-area {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            min-height: 600px;
+        }
+
+        .welcome-screen {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .welcome-screen h2 {
+            color: #667eea;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .welcome-screen p {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .start-reading {
+            display: inline-block;
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .start-reading:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(238, 90, 36, 0.3);
+        }
+
+        .chapter-content {
+            display: none;
+        }
+
+        .chapter-content.active {
+            display: block;
+        }
+
+        .chapter-content h3 {
+            color: #667eea;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+
+        .chapter-content p {
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .chapter-opener {
+            text-align: center;
+            padding: 40px 20px;
+            border: 2px solid #667eea;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #f8f9ff 0%, #e8eeff 100%);
+        }
+
+        .chapter-opener h3 {
+            color: #667eea;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+
+        .chapter-opener p {
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        .chapter-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+
+        .chapter-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .interactive-exercise {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .interactive-exercise h4 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+        }
+
+        .exercise-button {
+            display: inline-block;
+            background: white;
+            color: #f5576c;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 20px;
+            font-weight: 600;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .exercise-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid #eee;
+        }
+
+        .nav-button {
+            background: #667eea;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .nav-button:hover {
+            background: #5a6fd8;
+            transform: translateY(-1px);
+        }
+
+        .nav-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        @media (max-width: 968px) {
+            .main-container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .sidebar {
+                position: static;
+            }
+            
+            .header .container {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1>Accept Your Wealth</h1>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <aside class="sidebar">
+            <h2>Table of Contents</h2>
+            <ul class="chapter-list" id="chapterList">
+                <li class="chapter-item">
+                    <a href="#welcome" class="chapter-link active">Welcome</a>
+                </li>
+                <li class="chapter-item">
+                    <a href="#preface" class="chapter-link">Preface</a>
+                </li>
+                <li class="chapter-item">
+                    <a href="#chapter1" class="chapter-link interactive">Chapter 1: The Wake-Up Moment</a>
+                </li>
+                <li class="chapter-item">
+                    <a href="#chapter2" class="chapter-link interactive">Chapter 2: Money as Emotion</a>
+                </li>
+                <li class="chapter-item">
+                    <a href="#chapter3" class="chapter-link interactive">Chapter 3: Inner Safety First</a>
+                </li>
+                <li class="chapter-item">
+                    <a href="#chapter4" class="chapter-link interactive">Chapter 4: Rewriting the Story</a>
+                </li>
+                <li class="chapter-item">
+                    <a href="#chapter5" class="chapter-link interactive">Chapter 5: Wealth as Energy</a>
+                </li>
+                <li class="chapter-item">
+                    <a href="#chapter6" class="chapter-link">Chapter 6: Scarcity Addiction</a>
+                </li>
+                <li class="chapter-item">
+                    <a href="#chapter7" class="chapter-link">Chapter 7: The Enough Point</a>
+                </li>
+                <li class="chapter-item">
+                    <a href="#chapter8" class="chapter-link">Chapter 8: Financial Intimacy</a>
+                </li>
+                <li class="chapter-item">
+                    <a href="#chapter9" class="chapter-link">Chapter 9: Healing the Hustle</a>
+                </li>
+                <li class="chapter-item">
+                    <a href="#chapter10" class="chapter-link">Chapter 10: Your Inner Banker</a>
+                </li>
+                <li class="chapter-item">
+                    <a href="#chapter11" class="chapter-link">Chapter 11: Soul-Aligned Earning</a>
+                </li>
+                <li class="chapter-item">
+                    <a href="#chapter12" class="chapter-link">Chapter 12: Receiving Without Guilt</a>
+                </li>
+                <li class="chapter-item">
+                    <a href="#chapter13" class="chapter-link">Chapter 13: Spiritual Sales</a>
+                </li>
+                <li class="chapter-item">
+                    <a href="#chapter14" class="chapter-link">Chapter 14: Money and Identity</a>
+                </li>
+                <li class="chapter-item">
+                    <a href="#chapter15" class="chapter-link">Chapter 15: Holding Wealth</a>
+                </li>
+                <li class="chapter-item">
+                    <a href="#chapter16" class="chapter-link">Chapter 16: Legacy and Lineage</a>
+                </li>
+                <li class="chapter-item">
+                    <a href="#chapter17" class="chapter-link">Chapter 17: Reparenting Your Wallet</a>
+                </li>
+                <li class="chapter-item">
+                    <a href="#chapter18" class="chapter-link">Chapter 18: Leading with Wealth</a>
+                </li>
+                <li class="chapter-item">
+                    <a href="#chapter19" class="chapter-link">Chapter 19: Quantum Generosity</a>
+                </li>
+                <li class="chapter-item">
+                    <a href="#chapter20" class="chapter-link">Chapter 20: The Wealthy Self</a>
+                </li>
+                <li class="chapter-item">
+                    <a href="#bonus1" class="chapter-link">Bonus 1: Jordan Syndrome</a>
+                </li>
+                <li class="chapter-item">
+                    <a href="#bonus2" class="chapter-link">Bonus 2: Connecting Dots</a>
+                </li>
+                <li class="chapter-item">
+                    <a href="#bonus3" class="chapter-link">Bonus 3: Dead Horse</a>
+                </li>
+                <li class="chapter-item">
+                    <a href="#final" class="chapter-link">Final Thoughts</a>
+                </li>
+                <li class="chapter-item">
+                    <a href="#bonus" class="chapter-link interactive">Interactive: Wealth Quiz</a>
+                </li>
+            </ul>
+        </aside>
+
+        <main class="content-area">
+            <div id="welcome" class="chapter-content welcome-screen active">
+                <h2>Welcome to Your Transformation Journey</h2>
+                <p>You've taken the first step toward transforming your relationship with money. This interactive ebook will guide you through a deep exploration of your financial psychology.</p>
+                <p>Each chapter includes powerful exercises, visualizations, and tools designed to help you uncover and heal your money blocks.</p>
+                <a href="#chapter1" class="start-reading" onclick="showChapter('chapter1')">Start Reading</a>
+            </div>
+
+            <div id="preface" class="chapter-content">
+                <div class="chapter-opener">
+                    <h3>Preface</h3>
+                    <p>A Guide to Financial Freedom Through Emotional Intelligence and Spiritual Practice</p>
+                    <a href="https://docs.google.com/document/d/1R6hIJj7R6294riVpXL5rdXUDE5O9OdaLzPKcrgtWdGQ/edit" target="_blank" class="chapter-button">Read Preface</a>
+                </div>
+            </div>
+
+            <div id="chapter1" class="chapter-content">
+                <div class="chapter-opener">
+                    <h3>Chapter 1: The Wake-Up Moment</h3>
+                    <p>Your journey to financial transformation begins here.</p>
+                    <a href="https://docs.google.com/document/d/1qxo_0PMnjgJB5AVQCFhdBkLnKxebi3e8ORNi9xaPmU0/edit" target="_blank" class="chapter-button">Read Chapter 1</a>
+                </div>
+                
+                <div class="interactive-exercise">
+                    <h4>🎯 Interactive Visualization Exercise</h4>
+                    <p>Discover your hidden wealth blocks through our powerful visualization tool.</p>
+                    <a href="chapter1_visualization.html" target="_blank" class="exercise-button">Start Visualization</a>
+                </div>
+            </div>
+
+            <div id="chapter2" class="chapter-content">
+                <div class="chapter-opener">
+                    <h3>Chapter 2: Money as Emotion</h3>
+                    <p>Understanding the emotional landscape of your relationship with money.</p>
+                    <a href="https://docs.google.com/document/d/1YN8843EqtwGYXNf_LAaamIP3hJRBqJcV05y-04g7dGc/edit" target="_blank" class="chapter-button">Read Chapter 2</a>
+                </div>
+                
+                <div class="interactive-exercise">
+                    <h4>🎯 Money Emotion Wheel</h4>
+                    <p>Map your emotional relationship with money using our interactive emotion wheel.</p>
+                    <a href="chapter2_money_emotion_wheel.html" target="_blank" class="exercise-button">Explore Your Emotions</a>
+                </div>
+            </div>
+
+            <div id="chapter3" class="chapter-content">
+                <div class="chapter-opener">
+                    <h3>Chapter 3: Inner Safety First</h3>
+                    <p>Building the foundation of financial security from within.</p>
+                    <a href="https://docs.google.com/document/d/1Q-DMQRuXmtjm2OjzG1n60NfDTRCpwPVjeHuNNsQbBGQ/edit" target="_blank" class="chapter-button">Read Chapter 3</a>
+                </div>
+                
+                <div class="interactive-exercise">
+                    <h4>🎯 Inner Safety Meter</h4>
+                    <p>Assess your current level of inner safety and identify areas for healing.</p>
+                    <a href="chapter3_inner_safety_meter.html" target="_blank" class="exercise-button">Check Your Safety Level</a>
+                </div>
+            </div>
+
+            <div id="chapter4" class="chapter-content">
+                <div class="chapter-opener">
+                    <h3>Chapter 4: Rewriting the Story</h3>
+                    <p>Transform your inherited money patterns and beliefs.</p>
+                    <a href="https://docs.google.com/document/d/1RB6U9JUY9Wv9P2nlwQD7kUmaDb5sdjpiex0cin8FYhc/edit" target="_blank" class="chapter-button">Read Chapter 4</a>
+                </div>
+                
+                <div class="interactive-exercise">
+                    <h4>🎯 Family Money Tree</h4>
+                    <p>Explore your family's money patterns and rewrite your story.</p>
+                    <a href="chapter4_family_money_tree.html" target="_blank" class="exercise-button">Map Your Money Story</a>
+                </div>
+            </div>
+
+            <div id="chapter5" class="chapter-content">
+                <div class="chapter-opener">
+                    <h3>Chapter 5: Wealth as Energy</h3>
+                    <p>Understanding money as a flow of energy rather than a static resource.</p>
+                    <a href="https://docs.google.com/document/d/1kERv-xhFowBnZWkTurmTvjjGisII73Kj5NXSSMSC0GU/edit" target="_blank" class="chapter-button">Read Chapter 5</a>
+                </div>
+                
+                <div class="interactive-exercise">
+                    <h4>🎯 Wealth as Energy Exercises</h4>
+                    <p>Experience wealth as energy through multiple interactive tools.</p>
+                    <a href="chapter5_wealth_container.html" target="_blank" class="exercise-button">Wealth Container</a>
+                    <a href="chapter5_energy_particles.html" target="_blank" class="exercise-button">Energy Particles</a>
+                    <a href="chapter5_health_dashboard.html" target="_blank" class="exercise-button">Health Dashboard</a>
+                </div>
+            </div>
+
+            <div id="chapter6" class="chapter-content">
+                <div class="chapter-opener">
+                    <h3>Chapter 6: Scarcity Addiction</h3>
+                    <p>Breaking free from the addictive patterns of scarcity thinking.</p>
+                    <a href="https://docs.google.com/document/d/1wC8qOuToCf-eXaTzgFlmJFRxW2mFFywlhpLqdahn5PQ/edit" target="_blank" class="chapter-button">Read Chapter 6</a>
+                </div>
+            </div>
+
+            <div id="chapter7" class="chapter-content">
+                <div class="chapter-opener">
+                    <h3>Chapter 7: The Enough Point</h3>
+                    <p>Discovering your personal relationship with "enough" and contentment.</p>
+                    <a href="https://docs.google.com/document/d/15xOsNJXjqfosqjIh4xtIlgMcPVR3JYEVFgkf3l6Ch7Q/edit" target="_blank" class="chapter-button">Read Chapter 7</a>
+                </div>
+            </div>
+
+            <div id="chapter8" class="chapter-content">
+                <div class="chapter-opener">
+                    <h3>Chapter 8: Financial Intimacy</h3>
+                    <p>Building deeper connection and communication around money.</p>
+                    <a href="https://docs.google.com/document/d/1y6K096PpE1oCd3X9kqJ5qwox15xFgboL-ci8_Zxdcvc/edit" target="_blank" class="chapter-button">Read Chapter 8</a>
+                </div>
+            </div>
+
+            <div id="chapter9" class="chapter-content">
+                <div class="chapter-opener">
+                    <h3>Chapter 9: Healing the Hustle</h3>
+                    <p>Moving from toxic productivity to sustainable wealth creation.</p>
+                    <a href="https://docs.google.com/document/d/130ZOOz66scl9luk0raf2TGDfnfj19iaYOtuZuf53UBk/edit" target="_blank" class="chapter-button">Read Chapter 9</a>
+                </div>
+            </div>
+
+            <div id="chapter10" class="chapter-content">
+                <div class="chapter-opener">
+                    <h3>Chapter 10: Your Inner Banker</h3>
+                    <p>Developing your internal financial wisdom and decision-making.</p>
+                    <a href="https://docs.google.com/document/d/1LvUnRaLHrv3_eyj_ZKvY1Cxh9NjFgVjumClrGafF580/edit" target="_blank" class="chapter-button">Read Chapter 10</a>
+                </div>
+            </div>
+
+            <div id="chapter11" class="chapter-content">
+                <div class="chapter-opener">
+                    <h3>Chapter 11: Soul-Aligned Earning</h3>
+                    <p>Creating income streams that align with your values and purpose.</p>
+                    <a href="https://docs.google.com/document/d/1s1H_Xg9lNTXkXbkxtgNcrAhXlPDv9WiIM8ucOt_LIjA/edit" target="_blank" class="chapter-button">Read Chapter 11</a>
+                </div>
+            </div>
+
+            <div id="chapter12" class="chapter-content">
+                <div class="chapter-opener">
+                    <h3>Chapter 12: Receiving Without Guilt</h3>
+                    <p>Learning to accept abundance and prosperity gracefully.</p>
+                    <a href="https://docs.google.com/document/d/125bUN01MigX7_5k5NJvejc_mQZWLWYw3Ywi7CO_PGkg/edit" target="_blank" class="chapter-button">Read Chapter 12</a>
+                </div>
+            </div>
+
+            <div id="chapter13" class="chapter-content">
+                <div class="chapter-opener">
+                    <h3>Chapter 13: Spiritual Sales</h3>
+                    <p>Approaching sales and business from a place of service and integrity.</p>
+                    <a href="https://docs.google.com/document/d/1v_laIj_DqJwHK2NHr_CxK2a_RkY0nQ47MCLFgbDwIQY/edit" target="_blank" class="chapter-button">Read Chapter 13</a>
+                </div>
+            </div>
+
+            <div id="chapter14" class="chapter-content">
+                <div class="chapter-opener">
+                    <h3>Chapter 14: Money and Identity</h3>
+                    <p>Exploring how your sense of self is connected to your financial reality.</p>
+                    <a href="https://docs.google.com/document/d/1_vfhJXNaaBpgGowkNUUImY3bcacAIXtLAzJHVq0QKww/edit" target="_blank" class="chapter-button">Read Chapter 14</a>
+                </div>
+            </div>
+
+            <div id="chapter15" class="chapter-content">
+                <div class="chapter-opener">
+                    <h3>Chapter 15: Holding Wealth</h3>
+                    <p>The art of maintaining and growing your prosperity over time.</p>
+                    <a href="https://docs.google.com/document/d/1JUqHeaD8MMaJfzD_85OjBbSKJaQLCkgTdrSh6zQS1ew/edit" target="_blank" class="chapter-button">Read Chapter 15</a>
+                </div>
+            </div>
+
+            <div id="chapter16" class="chapter-content">
+                <div class="chapter-opener">
+                    <h3>Chapter 16: Legacy and Lineage</h3>
+                    <p>Creating lasting impact and healing generational money patterns.</p>
+                    <a href="https://docs.google.com/document/d/1FYZCJKgzrDnIGm_yfP3a3vBnUY5fABs1MEgcG_k-DPE/edit" target="_blank" class="chapter-button">Read Chapter 16</a>
+                </div>
+            </div>
+
+            <div id="chapter17" class="chapter-content">
+                <div class="chapter-opener">
+                    <h3>Chapter 17: Reparenting Your Wallet</h3>
+                    <p>Healing your financial inner child and creating new money habits.</p>
+                    <a href="https://docs.google.com/document/d/1_VPUfNKypvdQ3xz2ZTXCchmjwgqYy9YKcCZ-fR-3Gn8/edit" target="_blank" class="chapter-button">Read Chapter 17</a>
+                </div>
+            </div>
+
+            <div id="chapter18" class="chapter-content">
+                <div class="chapter-opener">
+                    <h3>Chapter 18: Leading with Wealth</h3>
+                    <p>Using your prosperity to create positive change in the world.</p>
+                    <a href="https://docs.google.com/document/d/1EUNmnxCJm2Bf8DhFliYxvrmWiwjGGGr07bCMKaoT0-c/edit" target="_blank" class="chapter-button">Read Chapter 18</a>
+                </div>
+            </div>
+
+            <div id="chapter19" class="chapter-content">
+                <div class="chapter-opener">
+                    <h3>Chapter 19: Quantum Generosity</h3>
+                    <p>Understanding giving as an investment in universal abundance.</p>
+                    <a href="https://docs.google.com/document/d/1ZRC9ScAN-BveRI1LevCyWn5S_qYrFfFmyTJVPRVbBLI/edit" target="_blank" class="chapter-button">Read Chapter 19</a>
+                </div>
+            </div>
+
+            <div id="chapter20" class="chapter-content">
+                <div class="chapter-opener">
+                    <h3>Chapter 20: The Wealthy Self</h3>
+                    <p>Integrating all aspects of wealth consciousness into your daily life.</p>
+                    <a href="https://docs.google.com/document/d/1A2jmScmUj2n_qf0IwHxRAxVARsPGuHtELQ2R2kF6CaU/edit" target="_blank" class="chapter-button">Read Chapter 20</a>
+                </div>
+            </div>
+
+            <div id="bonus1" class="chapter-content">
+                <div class="chapter-opener">
+                    <h3>Bonus 1: Jordan Syndrome</h3>
+                    <p>When Winning Becomes Your Prison</p>
+                    <a href="https://docs.google.com/document/d/1WhjGgjbACbpSHjJBaPFCDMhQEUfRNy1iktPOXSu656Y/edit" target="_blank" class="chapter-button">Read Bonus Chapter</a>
+                </div>
+            </div>
+
+            <div id="bonus2" class="chapter-content">
+                <div class="chapter-opener">
+                    <h3>Bonus 2: Connecting Dots</h3>
+                    <p>You Can Only Connect Dots When You Look Back</p>
+                    <a href="https://docs.google.com/document/d/1sJ9jyoLz3HOGyraPz1MAe2HB8Vh38fNSzoaN6RKOqWg/edit" target="_blank" class="chapter-button">Read Bonus Chapter</a>
+                </div>
+            </div>
+
+            <div id="bonus3" class="chapter-content">
+                <div class="chapter-opener">
+                    <h3>Bonus 3: Dead Horse</h3>
+                    <p>Are You Riding a Dead Horse?</p>
+                    <a href="https://docs.google.com/document/d/1xiBkaMm29YqPKAJ-u7jsncx_R_F2MtzN4846Uk-XFzY/edit" target="_blank" class="chapter-button">Read Bonus Chapter</a>
+                </div>
+            </div>
+
+            <div id="final" class="chapter-content">
+                <div class="chapter-opener">
+                    <h3>Final Thoughts</h3>
+                    <p>Your continuing journey to financial transformation</p>
+                    <a href="https://docs.google.com/document/d/1H8gmTeEXWGHUOObqIF1iBa4t1twlDCguTIy0-tVV74o/edit" target="_blank" class="chapter-button">Read Final Thoughts</a>
+                </div>
+            </div>
+
+            <div id="bonus" class="chapter-content">
+                <div class="interactive-exercise">
+                    <h4>🎯 Interactive Wealth Acceptance Quiz</h4>
+                    <p>Assess your current wealth consciousness and get personalized insights.</p>
+                    <a href="wealth_acceptance_quiz.html" target="_blank" class="exercise-button">Take the Quiz</a>
+                </div>
+            </div>
+
+            <div class="navigation">
+                <a href="#" class="nav-button" id="prevButton" onclick="previousChapter()" style="visibility: hidden;">← Previous</a>
+                <a href="#" class="nav-button" id="nextButton" onclick="nextChapter()">Next →</a>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const chapters = ['welcome', 'preface', 'chapter1', 'chapter2', 'chapter3', 'chapter4', 'chapter5', 'chapter6', 'chapter7', 'chapter8', 'chapter9', 'chapter10', 'chapter11', 'chapter12', 'chapter13', 'chapter14', 'chapter15', 'chapter16', 'chapter17', 'chapter18', 'chapter19', 'chapter20', 'bonus1', 'bonus2', 'bonus3', 'final', 'bonus'];
+        let currentChapterIndex = 0;
+
+        function showChapter(chapterId) {
+            // Hide all chapters
+            document.querySelectorAll('.chapter-content').forEach(chapter => {
+                chapter.classList.remove('active');
+            });
+
+            // Show selected chapter
+            document.getElementById(chapterId).classList.add('active');
+
+            // Update navigation
+            currentChapterIndex = chapters.indexOf(chapterId);
+            updateNavigation();
+
+            // Update sidebar active state
+            document.querySelectorAll('.chapter-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            document.querySelector(`a[href="#${chapterId}"]`).classList.add('active');
+
+            // Update progress
+            updateProgress();
+
+            // Save progress
+            localStorage.setItem('currentChapter', chapterId);
+        }
+
+        function nextChapter() {
+            if (currentChapterIndex < chapters.length - 1) {
+                showChapter(chapters[currentChapterIndex + 1]);
+            }
+        }
+
+        function previousChapter() {
+            if (currentChapterIndex > 0) {
+                showChapter(chapters[currentChapterIndex - 1]);
+            }
+        }
+
+        function updateNavigation() {
+            const prevButton = document.getElementById('prevButton');
+            const nextButton = document.getElementById('nextButton');
+
+            prevButton.style.visibility = currentChapterIndex > 0 ? 'visible' : 'hidden';
+            nextButton.style.visibility = currentChapterIndex < chapters.length - 1 ? 'visible' : 'hidden';
+        }
+
+        function updateProgress() {
+            const progress = (currentChapterIndex / (chapters.length - 1)) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        // Chapter navigation clicks
+        document.querySelectorAll('.chapter-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const chapterId = link.getAttribute('href').substring(1);
+                showChapter(chapterId);
+            });
+        });
+
+        // Load saved progress
+        window.addEventListener('load', () => {
+            const savedChapter = localStorage.getItem('currentChapter');
+            if (savedChapter && chapters.includes(savedChapter)) {
+                showChapter(savedChapter);
+            }
+        });
+    </script>
+</body>
+</html>
